@@ -609,7 +609,6 @@
       .stat { min-width: calc(50% - 5px); }
     }
 
-  
     .memory-section {
         margin-top: 28px;
         padding-top: 18px;
@@ -625,7 +624,6 @@
         margin-top: 28px;
     }
     .memory-head {
-	margin: 0 2% 0 2%;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -636,31 +634,29 @@
     .memory-title {
         color: #fff5e6;
         font-size: 18px;
-        margin: 0;
+        margin: 0 2% 0 2%;
     }
     .memory-count {
         color: var(--muted);
         font-size: 12px;
+		margin: 0 2% 0 2%;
     }
     .memory-grid {
-	margin: 0 2% 0 2%;
         display: grid;
-        grid-template-columns: repeat(4, minmax(260px, 1fr));
+        grid-auto-flow: column;
+        grid-auto-columns: minmax(230px, 230px);
         gap: 14px;
         overflow-x: auto;
         scroll-snap-type: x proximity;
         padding-bottom: 4px;
+        -webkit-overflow-scrolling: touch;
     }
-    .memory-grid::-webkit-scrollbar {
-	margin: 0 2% 0 2%;
-        height: 10px;
-    }
+    .memory-grid::-webkit-scrollbar { height: 10px; }
     .memory-grid::-webkit-scrollbar-thumb {
         background: rgba(223,208,184,.28);
         border-radius: 999px;
     }
     .memory-grid::-webkit-scrollbar-track {
-	margin: 0 2% 0 2%;
         background: rgba(255,255,255,.04);
         border-radius: 999px;
     }
@@ -672,20 +668,24 @@
         box-shadow: 0 2px 8px rgba(0,0,0,.25);
         scroll-snap-align: start;
         cursor: pointer;
-        min-width: 260px;
+        min-width: 230px;
+        transition: transform .2s ease, box-shadow .2s ease;
     }
     .memory-card:hover {
         transform: translateY(-2px);
         box-shadow: 0 10px 20px rgba(0,0,0,.35);
     }
-    .memory-frame {
+    .memory-frame,
+    .memory-image,
+    .memory-video {
         width: 100%;
         aspect-ratio: 16 / 9;
         border: 0;
         display: block;
         background: #111827;
-        pointer-events: none;
+        object-fit: cover;
     }
+    .memory-frame { pointer-events: none; }
     .memory-caption {
         display: block;
         padding: 10px 12px;
@@ -693,6 +693,7 @@
         font-size: 12px;
         word-break: break-word;
         line-height: 1.5;
+        min-height: 38px;
     }
     .memory-hint {
         margin-top: 10px;
@@ -711,9 +712,7 @@
         padding: 24px;
         backdrop-filter: blur(8px);
     }
-    .memory-modal.active {
-        display: flex;
-    }
+    .memory-modal.active { display: flex; }
     .memory-modal-panel {
         width: min(1200px, 100%);
         max-height: 92vh;
@@ -738,7 +737,6 @@
         color: #fff5e6;
         font-size: 14px;
         font-weight: 700;
-		margin: 0 2% 0 2%;
     }
     .memory-modal-sub {
         color: var(--muted);
@@ -761,9 +759,7 @@
         flex-shrink: 0;
     }
     .memory-close:hover,
-    .memory-nav:hover {
-        background: rgba(223,208,184,.16);
-    }
+    .memory-nav:hover { background: rgba(223,208,184,.16); }
     .memory-modal-body {
         display: grid;
         grid-template-columns: 54px 1fr 54px;
@@ -772,12 +768,24 @@
         padding: 14px;
         min-height: 0;
     }
-    .memory-modal-frame {
+    .memory-modal-viewer {
         width: 100%;
         height: min(70vh, 760px);
-        border: 0;
-        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         background: #111827;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+    .memory-modal-frame,
+    .memory-modal-image,
+    .memory-modal-video {
+        width: 100%;
+        height: 100%;
+        border: 0;
+        background: #111827;
+        object-fit: contain;
     }
     .memory-modal-strip {
         display: grid;
@@ -795,17 +803,21 @@
         overflow: hidden;
         border: 1px solid rgba(223,208,184,.12);
         cursor: pointer;
+        padding: 0;
     }
     .memory-thumb.active {
         outline: 2px solid var(--accent);
         outline-offset: -2px;
     }
-    .memory-thumb iframe {
+    .memory-thumb img,
+    .memory-thumb iframe,
+    .memory-thumb video {
         width: 100%;
         aspect-ratio: 16/9;
         border: 0;
         display: block;
         background: #111827;
+        object-fit: cover;
         pointer-events: none;
     }
     .memory-thumb span {
@@ -814,16 +826,13 @@
         font-size: 11px;
         color: #e5e7eb;
         line-height: 1.45;
-    }
-    @media (max-width: 1024px) {
-        .memory-grid { grid-template-columns: repeat(4, minmax(230px, 1fr)); }
-        .memory-modal-frame { height: min(62vh, 620px); }
+        min-height: 34px;
     }
     @media (max-width: 768px) {
         .memory-title { font-size: 16px; }
         .memory-intro { font-size: 12px; }
-        .memory-grid { grid-template-columns: repeat(4, minmax(220px, 1fr)); }
-        .memory-card { min-width: 220px; }
+        .memory-grid { grid-auto-columns: minmax(210px, 210px); }
+        .memory-card { min-width: 210px; }
         .memory-modal { padding: 10px; }
         .memory-modal-panel { max-height: 95vh; }
         .memory-modal-top { padding: 10px; }
@@ -833,7 +842,7 @@
             padding: 10px;
         }
         .memory-close, .memory-nav { width: 38px; height: 38px; font-size: 18px; }
-        .memory-modal-frame { height: min(52vh, 420px); }
+        .memory-modal-viewer { height: min(52vh, 420px); }
         .memory-modal-strip { grid-auto-columns: minmax(150px, 180px); padding: 10px; }
     }
 
@@ -1717,87 +1726,97 @@ const HOTELS = {
     const f = poiList.querySelector('.poiBtn');
     if(f) f.click();
   
+
+const MEMORY_TITLE_MAP = {
+  "住宿": ["住宿外觀", "住宿房間"],
+  "玉龍雪山": ["雪山入口", "纜車沿途", "高山步道", "雪山觀景", "山頂遠景", "冰川平台", "藍天雪峰", "棧道風景", "雪山合照", "高海拔景觀", "雲海山景", "回程風光", "山區特寫", "旅程留影"],
+  "妙湛寺金剛塔": ["金剛塔全景", "寺院建築"],
+  "洱海": ["洱海湖岸", "湖邊風景", "沿途街景", "海景留影", "藍天洱海", "岸邊建築", "旅途片刻", "湖光山色", "午後風景", "洱海回憶"],
+  "雲南省博物館": ["博物館外觀", "展館入口", "館內展品", "文物展示", "展廳細節", "文化展區", "館內光影", "展覽留影", "歷史文物", "展廳一角", "參觀片段", "博物館回憶"],
+  "麗江古城": ["古城街景", "石板路巷弄", "古城夜色", "木樓建築", "古城角落", "旅途街拍", "店舖風景", "古城人文", "晨間古城", "巷口風光", "古城留影", "小橋流水", "夜晚燈光", "麗江回憶"],
+  "虎跳峽": ["峽谷入口", "山谷步道", "江水激流", "峽谷景觀", "山路留影", "虎跳峽回憶", "虎跳峽影片"]
+};
+
 const MEMORY_GROUPS = {
-	"住宿": [
-    { type: "image", title: "IMG20260316154427", src: "https://i.imgur.com/Vpmgl6K.jpeg" },
-    { type: "image", title: "IMG20260316154453", src: "https://i.imgur.com/0vLqclm.jpeg" }
-  ],
-  "洱海": [
-    { type: "image", title: "IMG20260315102918", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=c5596129-3054-42ea-95df-d0321b372d2e" },
-    { type: "image", title: "IMG20260315103318", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=da236dad-ef56-49a7-a3f2-e566989b8bc5" },
-    { type: "image", title: "IMG20260315110021", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=9687d081-77d8-4e8d-b953-3918f855d815" },
-    { type: "image", title: "IMG20260315120315", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=3dfd7352-6931-4b9f-9fb3-966867978c8e" },
-    { type: "image", title: "IMG20260315144021", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=c6fd09c2-1fad-4d37-a9bc-2e61e55b19e2" },
-    { type: "image", title: "IMG20260315163748", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=ac2f938b-003b-4eab-bf3d-a96478a465b4" },
-    { type: "image", title: "IMG20260315170030", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=7ac83da9-5114-4a02-a229-91b99a237d42" },
-    { type: "image", title: "IMG20260315174049", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=2cebc16c-6ec8-4a6f-9b4b-bddae4c5b0f0" },
-    { type: "image", title: "IMG20260315175808", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=6d83cf70-1a1e-4227-9aee-0aa620ac267e" },
-    { type: "image", title: "IMG20260315183316", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=40b13a55-f78a-4ea8-a5c9-5b23c72e1f68" },
-    { type: "image", title: "IMG20260315183614", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=13b42ed7-60a1-424a-86da-d78ecda58222" }
+  "住宿": [
+    { type: "image", title: "", src: "https://i.imgur.com/Vpmgl6K.jpeg" },
+    { type: "image", title: "", src: "https://i.imgur.com/0vLqclm.jpeg" }
   ],
   "玉龍雪山": [
-    { type: "image", title: "IMG20260317121446", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=71511482-a7e8-434a-9e9d-8ed123144d6b" },
-    { type: "image", title: "IMG20260317130303", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=6a69f9e3-a61d-428c-8459-0347167df65d" },
-    { type: "image", title: "IMG20260317131426", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=f6e6d279-f0a0-4ddc-a646-ced7951c508d" },
-    { type: "image", title: "IMG20260317140345", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=f92a3a5d-efba-429e-a4cf-4cd6922b10f3" },
-    { type: "image", title: "IMG20260317143027", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=25976dc2-fc08-4377-8e49-a36ea103ea63" },
-    { type: "image", title: "IMG20260317143627", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=5ad3dc72-a337-4889-aeff-3dd8e738744f" },
-    { type: "image", title: "IMG20260317144044", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=50a37f2c-af27-4d20-bd7a-7eb7726ec977" },
-    { type: "image", title: "IMG20260317144914", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=8eaa7e51-9f80-45af-bea5-31b7debc8e8e" },
-    { type: "image", title: "IMG20260317145903", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=104bf6ba-d57c-489d-bbbe-f74eaa1846cb" },
-    { type: "image", title: "IMG20260317150641", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=cf1331f6-5181-4a8e-b23a-68f7698ff8a6" },
-    { type: "image", title: "IMG20260317150911", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=b5ee5d0b-105f-4e6b-bc8e-839214021dc9" },
-    { type: "image", title: "IMG20260317151250", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=21e9c97f-0afe-4023-a07d-f579cd6d21ee" },
-    { type: "image", title: "IMG20260317162559", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=88c45494-abe0-467c-8c6d-be3c64677859" },
-    { type: "image", title: "IMG20260317161039", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=22fdfa2c-d920-4a43-9122-34da2e1b2a38" }
+    { type: "image", title: "", src: "https://i.imgur.com/vUnS2Sq.jpeg" },
+    { type: "image", title: "", src: "https://i.imgur.com/2nYvOGa.jpeg" },
+    { type: "image", title: "", src: "https://i.imgur.com/8YYllOp.jpeg" },
+    { type: "image", title: "", src: "https://i.imgur.com/P7hOY62.jpeg" },
+    { type: "image", title: "", src: "https://i.imgur.com/YkwyvsI.jpeg" },
+    { type: "image", title: "", src: "https://i.imgur.com/jEyrMoE.jpeg" },
+    { type: "image", title: "", src: "https://i.imgur.com/lYjnvxt.jpeg" },
+    { type: "image", title: "", src: "https://i.imgur.com/P5okHdf.jpeg" },
+    { type: "image", title: "", src: "https://i.imgur.com/QymDsLh.jpeg" },
+    { type: "image", title: "", src: "https://i.imgur.com/UVg1gxo.jpeg" },
+    { type: "image", title: "", src: "https://i.imgur.com/1s7XL7V.jpeg" },
+    { type: "image", title: "", src: "https://i.imgur.com/dVS5gvZ.jpeg" },
+    { type: "image", title: "", src: "https://i.imgur.com/BhQTnpL.jpeg" },
+    { type: "image", title: "", src: "https://i.imgur.com/yq4WPrg.jpeg" }
   ],
   "妙湛寺金剛塔": [
-    { type: "image", title: "IMG20260313155153", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=ca9223c4-16fc-49af-9c04-9a3cec3f2a86" },
-    { type: "image", title: "IMG20260313155158", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=380e0e97-5014-4004-b378-ccc6b51d4226" }
+    { type: "image", title: "", src: "https://i.imgur.com/YHTwhWi.jpeg" },
+    { type: "image", title: "", src: "https://i.imgur.com/jiw4KQc.jpeg" }
+  ],
+  "洱海": [
+    { type: "image", title: "", src: "https://i.imgur.com/WpaBDPc.jpeg" },
+    { type: "image", title: "", src: "https://i.imgur.com/OxbalvB.jpeg" },
+    { type: "image", title: "", src: "https://i.imgur.com/cvFE9xE.jpeg" },
+    { type: "image", title: "", src: "https://i.imgur.com/0cI3rP5.jpeg" },
+    { type: "image", title: "", src: "https://i.imgur.com/zcH4IOL.jpeg" },
+    { type: "image", title: "", src: "https://i.imgur.com/qOJNcyt.jpeg" },
+    { type: "image", title: "", src: "https://i.imgur.com/YiKBdrB.jpeg" },
+    { type: "image", title: "", src: "https://i.imgur.com/Zs1llri.jpeg" },
+    { type: "image", title: "", src: "https://i.imgur.com/YAgyw1U.jpeg" },
+    { type: "image", title: "", src: "https://i.imgur.com/xIws3ex.jpeg" }
   ],
   "雲南省博物館": [
-    { type: "image", title: "IMG20260313114414", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=3a20b3d8-cee0-4ecb-ada1-2ab78c984b26" },
-    { type: "image", title: "IMG20260313121119", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=185e6e3b-3c29-44b0-baa5-4b542c251c48" },
-    { type: "image", title: "IMG20260313122805", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=12d56947-5681-43aa-83d3-6124d7512d3b" },
-    { type: "image", title: "IMG20260313122811", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=8081a0f4-9b9f-4387-af38-143ccb05b6ec" },
-    { type: "image", title: "IMG20260313122815", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=0ea08a6f-3575-467a-a5f4-3eaf271da7a4" },
-    { type: "image", title: "IMG20260313121418", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=f35c0446-ae63-42ed-8a92-9b6c8446200f" },
-    { type: "image", title: "IMG20260313123609", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=740e1def-5ce4-4141-a4e1-6972208ce840" },
-    { type: "image", title: "IMG20260313131224", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=c7e5ed6b-87e5-4f46-91d2-76f5f8a2c294" },
-    { type: "image", title: "IMG20260313131402", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=ab5e8c6f-9763-43a4-935b-f6cab2c4aa53" },
-    { type: "image", title: "IMG20260313131525_01", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=9c30c606-9d8a-45c5-8d86-8d0d247ca3c0" },
-    { type: "image", title: "IMG20260313134025", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=6ee27278-89f1-479e-adfc-c831de07adef" },
-    { type: "image", title: "IMG20260313140911", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=0161be17-3737-486f-b5e2-dfdca57b285d" }
+    { type: "image", title: "", src: "https://i.imgur.com/DIv8ugX.jpeg" },
+    { type: "image", title: "", src: "https://i.imgur.com/H6aj9Vr.jpeg" },
+    { type: "image", title: "", src: "https://i.imgur.com/tVC7Tbb.jpeg" },
+    { type: "image", title: "", src: "https://i.imgur.com/H2eAxoK.jpeg" },
+    { type: "image", title: "", src: "https://i.imgur.com/zQs4BKt.jpeg" },
+    { type: "image", title: "", src: "https://i.imgur.com/d7CZ6hc.jpeg" },
+    { type: "image", title: "", src: "https://i.imgur.com/T3hkXZ9.jpeg" },
+    { type: "image", title: "", src: "https://i.imgur.com/Sp8tVx6.jpeg" },
+    { type: "image", title: "", src: "https://i.imgur.com/MA7wo13.jpeg" },
+    { type: "image", title: "", src: "https://i.imgur.com/XgqAiHs.jpeg" },
+    { type: "image", title: "", src: "https://i.imgur.com/Myj9ut1.jpeg" },
+    { type: "image", title: "", src: "https://i.imgur.com/YEpHPbn.jpeg" }
   ],
   "麗江古城": [
-    { type: "image", title: "IMG20260316165137", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=6f626714-f952-4a92-890a-58624936329b" },
-    { type: "image", title: "IMG20260316172948", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=36fe87e3-fdc3-4a7e-b877-e9388a44dfc6" },
-    { type: "image", title: "IMG20260316174941", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=d0840064-e967-42ac-bf57-86f95a9f06ab" },
-    { type: "image", title: "IMG20260316180532", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=448397c2-b53d-4b70-b499-0ee1b1f121af" },
-    { type: "image", title: "IMG20260316182151", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=015b4397-80bb-4db9-abde-201298dc61f0" },
-    { type: "image", title: "IMG20260316182948", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=9f4e4ac3-8777-4cda-8386-c1a5fa9d2d5b" },
-    { type: "image", title: "IMG20260316195454", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=fdd33be2-c22d-4531-8fb4-fb9d1329df9c" },
-    { type: "image", title: "IMG20260317071208", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=36744dbe-eba1-4b89-b0f6-1796e39de86f" },
-    { type: "image", title: "IMG20260317071230", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=6e6c703f-d9be-4d55-8fa1-999c8148a130" },
-    { type: "image", title: "IMG20260317072444", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=a861443a-3d88-449f-bdde-74d98fd5c415" },
-    { type: "image", title: "IMG20260317073747", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=397155f7-bf45-4000-ac1c-5cd0e1f56f77" },
-    { type: "image", title: "IMG20260317080419", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=3ebf5e30-b1b7-4940-9770-5c469eab31c0" },
-    { type: "image", title: "IMG20260317080703", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=f99da3bb-0169-478d-8bc3-d4e42edffad9" },
-    { type: "image", title: "IMG20260317081531", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=2abe5f09-2c03-4c01-9b31-f0309610327a" }
+    { type: "image", title: "", src: "https://i.imgur.com/SeKIGRC.jpeg" },
+    { type: "image", title: "", src: "https://i.imgur.com/5dyVxf3.jpeg" },
+    { type: "image", title: "", src: "https://i.imgur.com/MEj7GOU.jpeg" },
+    { type: "image", title: "", src: "https://i.imgur.com/AfnualY.jpeg" },
+    { type: "image", title: "", src: "https://i.imgur.com/YLud0Bl.jpeg" },
+    { type: "image", title: "", src: "https://i.imgur.com/fVbdQNS.jpeg" },
+    { type: "image", title: "", src: "https://i.imgur.com/Yb70ms0.jpeg" },
+    { type: "image", title: "", src: "https://i.imgur.com/6aqfDWM.jpeg" },
+    { type: "image", title: "", src: "https://i.imgur.com/lC0e4sR.jpeg" },
+    { type: "image", title: "", src: "https://i.imgur.com/v7oXlFi.jpeg" },
+    { type: "image", title: "", src: "https://i.imgur.com/tpypIJ5.jpeg" },
+    { type: "image", title: "", src: "https://i.imgur.com/Ga3td7m.jpeg" },
+    { type: "image", title: "", src: "https://i.imgur.com/hAFso0f.jpeg" },
+    { type: "image", title: "", src: "https://i.imgur.com/drnJT07.jpeg" }
   ],
   "虎跳峽": [
-    { type: "image", title: "IMG20260318130035", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=74fc8819-bcfb-472d-864f-a9596516b54d" },
-    { type: "image", title: "IMG20260318130119", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=ea18c780-915f-45fc-96fb-d0916e292d4e" },
-    { type: "image", title: "IMG20260318130333", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=6043b349-c494-4ee7-b2e1-4594b4ea39e5" },
-    { type: "image", title: "IMG20260318131412", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=d14ffd57-7b09-4a47-9476-af3608a2e0b5" },
-    { type: "image", title: "IMG20260318132753", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=f33ffe08-3f8d-4d5a-a8d1-1fc75f789cb5" },
-    { type: "image", title: "IMG20260318134322", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=b2c8234f-93df-45ec-86ea-c309e4d81072" },
-    { type: "video", title: "VID20260318132424.mp4", src: "https://warslock-my.sharepoint.com/personal/loksang_o2086o_onmicrosoft_com/_layouts/15/embed.aspx?UniqueId=5138e116-1861-4939-a757-5f64a478eba2&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create" }
+    { type: "image", title: "", src: "https://i.imgur.com/0Fagjc5.jpeg" },
+    { type: "image", title: "", src: "https://i.imgur.com/xHsj8h8.jpeg" },
+    { type: "image", title: "", src: "https://i.imgur.com/dGxh5vZ.jpeg" },
+    { type: "image", title: "", src: "https://i.imgur.com/A8ZnOhW.jpeg" },
+    { type: "image", title: "", src: "https://i.imgur.com/GJOOPB9.jpeg" },
+    { type: "image", title: "", src: "https://i.imgur.com/z2hQKyX.jpeg" },
+    { type: "video", title: "", src: "https://i.imgur.com/2whcE04.mp4" }
   ]
 };
 
 const memoryModal = document.getElementById('memoryModal');
-const memoryModalFrame = document.getElementById('memoryModalFrame');
+const memoryModalViewer = document.getElementById('memoryModalViewer');
 const memoryModalTitle = document.getElementById('memoryModalTitle');
 const memoryModalSub = document.getElementById('memoryModalSub');
 const memoryModalStrip = document.getElementById('memoryModalStrip');
@@ -1805,28 +1824,46 @@ const memoryPrev = document.getElementById('memoryPrev');
 const memoryNext = document.getElementById('memoryNext');
 const memoryClose = document.getElementById('memoryClose');
 
-let memoryState = {
-  groupName: '',
-  items: [],
-  index: 0
-};
+let memoryState = { groupName: '', items: [], index: 0 };
+
+function getMemoryTitle(groupName, index, item) {
+  if (item.title && item.title.trim()) return item.title.trim();
+  const list = MEMORY_TITLE_MAP[groupName] || [];
+  return list[index] || `${groupName} ${index + 1}`;
+}
+
+function createMediaElement(item, className, title, thumb = false) {
+  if (item.type === 'video') {
+    if (/\.mp4($|\?)/i.test(item.src)) {
+      return `<video class="${className}" src="${item.src}" ${thumb ? '' : 'controls playsinline preload="metadata"'}></video>`;
+    }
+    return `<iframe class="${className}" src="${item.src}" title="${title}" loading="lazy" allowfullscreen frameborder="0" scrolling="no" referrerpolicy="no-referrer-when-downgrade"></iframe>`;
+  }
+  return `<img class="${className}" src="${item.src}" alt="${title}" loading="lazy" referrerpolicy="no-referrer" />`;
+}
 
 function createMemoryCard(item, groupName, index) {
+  const title = getMemoryTitle(groupName, index, item);
+  const className = item.type === 'image' ? 'memory-image' : (/\.mp4($|\?)/i.test(item.src) ? 'memory-video' : 'memory-frame');
   return `
-    <article class="memory-card" data-memory-group="${groupName}" data-memory-index="${index}" tabindex="0" role="button" aria-label="打開 ${item.title}">
-      <iframe class="memory-frame" src="${item.src}" title="${item.title}" loading="lazy" allowfullscreen frameborder="0" scrolling="no" referrerpolicy="no-referrer-when-downgrade"></iframe>
-      <span class="memory-caption">${item.title}</span>
+    <article class="memory-card" data-memory-group="${groupName}" data-memory-index="${index}" tabindex="0" role="button" aria-label="打開 ${title}">
+      ${createMediaElement(item, className, title)}
+      <span class="memory-caption">${title}</span>
     </article>
   `;
 }
 
 function renderMemoryModalStrip() {
-  memoryModalStrip.innerHTML = memoryState.items.map((item, idx) => `
-    <button class="memory-thumb ${idx === memoryState.index ? 'active' : ''}" type="button" data-thumb-index="${idx}" aria-label="查看 ${item.title}">
-      <iframe src="${item.src}" title="${item.title}" loading="lazy" allowfullscreen frameborder="0" scrolling="no"></iframe>
-      <span>${item.title}</span>
-    </button>
-  `).join('');
+  memoryModalStrip.innerHTML = memoryState.items.map((item, idx) => {
+    const title = getMemoryTitle(memoryState.groupName, idx, item);
+    const className = item.type === 'image' ? '' : '';
+    return `
+      <button class="memory-thumb ${idx === memoryState.index ? 'active' : ''}" type="button" data-thumb-index="${idx}" aria-label="查看 ${title}">
+        ${createMediaElement(item, className, title, true)}
+        <span>${title}</span>
+      </button>
+    `;
+  }).join('');
 
   memoryModalStrip.querySelectorAll('.memory-thumb').forEach(btn => {
     btn.addEventListener('click', () => updateMemoryModal(Number(btn.dataset.thumbIndex)));
@@ -1836,9 +1873,11 @@ function renderMemoryModalStrip() {
 function updateMemoryModal(index) {
   memoryState.index = index;
   const item = memoryState.items[index];
-  memoryModalFrame.src = item.src;
+  const title = getMemoryTitle(memoryState.groupName, index, item);
+  const mediaClass = item.type === 'image' ? 'memory-modal-image' : (/\.mp4($|\?)/i.test(item.src) ? 'memory-modal-video' : 'memory-modal-frame');
+  memoryModalViewer.innerHTML = createMediaElement(item, mediaClass, title);
   memoryModalTitle.textContent = memoryState.groupName;
-  memoryModalSub.textContent = `${index + 1} / ${memoryState.items.length} · ${item.title}`;
+  memoryModalSub.textContent = `${index + 1} / ${memoryState.items.length} · ${title}`;
   renderMemoryModalStrip();
 }
 
@@ -1855,7 +1894,7 @@ function openMemoryModal(groupName, index) {
 function closeMemoryModal() {
   memoryModal.classList.remove('active');
   memoryModal.setAttribute('aria-hidden', 'true');
-  memoryModalFrame.src = 'about:blank';
+  memoryModalViewer.innerHTML = '';
   document.body.style.overflow = '';
 }
 
@@ -1868,7 +1907,6 @@ function stepMemory(delta) {
 function renderMemories(containerId, groups) {
   const container = document.getElementById(containerId);
   if (!container) return;
-
   container.innerHTML = Object.entries(groups).map(([groupName, items]) => `
     <section class="memory-block">
       <div class="memory-head">
@@ -1897,9 +1935,7 @@ function renderMemories(containerId, groups) {
 memoryPrev.addEventListener('click', () => stepMemory(-1));
 memoryNext.addEventListener('click', () => stepMemory(1));
 memoryClose.addEventListener('click', closeMemoryModal);
-memoryModal.addEventListener('click', (e) => {
-  if (e.target === memoryModal) closeMemoryModal();
-});
+memoryModal.addEventListener('click', (e) => { if (e.target === memoryModal) closeMemoryModal(); });
 document.addEventListener('keydown', (e) => {
   if (!memoryModal.classList.contains('active')) return;
   if (e.key === 'Escape') closeMemoryModal();
