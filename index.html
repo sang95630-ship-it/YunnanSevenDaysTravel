@@ -609,247 +609,161 @@
       .stat { min-width: calc(50% - 5px); }
     }
 
-    .memory-section {
-        margin-top: 28px;
-        padding-top: 18px;
-        border-top: 1px solid rgba(223,208,184,.15);
+    
+    
+    
+    
+/* 外層：景點卡片一律單欄 */
+
+
+/* 每個景點卡片 */
+
+
+/* 卡片內圖片區：桌面 4 張 */
+
+
+
+
+/* 卡片標題／描述 */
+
+
+/* 平板：卡片內 2 張圖片 */
+
+
+/* 手機：卡片內 1 張圖片 */
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /* ══ GALLERY SHELL ══ */
+    .memory-section { margin-top: 28px; padding-top: 18px; border-top: 1px solid rgba(223,208,184,.15); }
+    .memory-intro   { color: #d1d5db; font-size: 13px; line-height: 1.7; margin-bottom: 16px; }
+
+    .gallery-groups-wrap {
+      padding: 0 2%;
+      display: flex; flex-direction: column; gap: 24px;
+      margin-bottom: 24px;
     }
-    .memory-intro {
-        color: #d1d5db;
-        font-size: 13px;
-        line-height: 1.7;
-        margin-bottom: 16px;
+    .gallery-group-title {
+      color: var(--accent);
+      font-size: 14px; font-weight: 700;
+      margin-bottom: 8px; letter-spacing: .03em;
     }
-    .memory-block + .memory-block {
-        margin-top: 28px;
+    .gallery-shell  { position: relative; overflow: hidden; margin-bottom: 2px; }
+    .gallery-hint   {
+      display: flex; justify-content: space-between; align-items: center;
+      color: #9ca3af; font-size: 11px; margin-bottom: 7px;
     }
-    .memory-head {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 12px;
-        margin-bottom: 12px;
-        flex-wrap: wrap;
+    .gallery-dots   { display: flex; gap: 4px; align-items: center; }
+    .gallery-dot    { width: 6px; height: 6px; border-radius: 50%; background: #3a4249; transition: background .2s, width .2s; }
+    .gallery-dot.active { background: var(--accent); width: 18px; border-radius: 3px; }
+
+    .gallery-scroll {
+      display: flex; gap: 10px;
+      overflow-x: auto; scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 6px;
     }
-    .memory-title {
-        color: #fff5e6;
-        font-size: 18px;
-        margin: 0 2% 0 2%;
+    .gallery-scroll::-webkit-scrollbar { height: 4px; }
+    .gallery-scroll::-webkit-scrollbar-thumb { background: #3a4249; border-radius: 999px; }
+
+    .gallery-item {
+      flex: 0 0 calc(33.333% - 8px); min-width: 0;
+      border-radius: 10px; overflow: hidden;
+      background: #1f2937; scroll-snap-align: start;
+      cursor: zoom-in; border: 1px solid rgba(223,208,184,.10);
+      transition: box-shadow .2s;
     }
-    .memory-count {
-        color: var(--muted);
-        font-size: 12px;
-		margin: 0 2% 0 2%;
+    .gallery-item:hover { box-shadow: 0 4px 18px rgba(0,0,0,.45); }
+    .gallery-item img,
+    .gallery-item video {
+      aspect-ratio: 4/3; object-fit: cover; width: 100%; display: block;
+      transition: transform .3s; background: #111827;
     }
-    .memory-grid {
-        display: grid;
-        grid-auto-flow: column;
-        grid-auto-columns: minmax(230px, 230px);
-        gap: 14px;
-        overflow-x: auto;
-        scroll-snap-type: x proximity;
-        padding-bottom: 4px;
-        -webkit-overflow-scrolling: touch;
-		margin: 0 2% 0 2%;
+    .gallery-item:hover img,
+    .gallery-item:hover video { transform: scale(1.04); }
+    .gallery-item figcaption {
+      padding: 6px 8px; font-size: 11px; color: #9ca3af;
+      line-height: 1.4; background: #1f2937;
     }
-    .memory-grid::-webkit-scrollbar { height: 10px; }
-    .memory-grid::-webkit-scrollbar-thumb {
-        background: rgba(223,208,184,.28);
-        border-radius: 999px;
-		margin: 0 2% 0 2%;
+    .gallery-item--video figcaption { color: var(--accent); }
+
+    /* ── Lightbox ── */
+    .g-lightbox {
+      position: fixed; inset: 0; z-index: 9999;
+      background: rgba(8,10,14,.93);
+      display: none; align-items: center; justify-content: center;
+      flex-direction: column; padding: 20px;
+      backdrop-filter: blur(10px);
     }
-    .memory-grid::-webkit-scrollbar-track {
-        background: rgba(255,255,255,.04);
-        border-radius: 999px;
-		margin: 0 2% 0 2%;
+    .g-lightbox.active { display: flex; }
+    .g-lb-viewer {
+      width: min(1100px, 92vw); max-height: 76vh;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 12px; overflow: hidden; background: #111827;
     }
-    .memory-card {
-        background: #343A42;
-        border-radius: 12px;
-        overflow: hidden;
-        border: 1px solid rgba(223,208,184,.12);
-        box-shadow: 0 2px 8px rgba(0,0,0,.25);
-        scroll-snap-align: start;
-        cursor: pointer;
-        min-width: 230px;
-        transition: transform .2s ease, box-shadow .2s ease;
+    .g-lb-viewer img  { max-width: 100%; max-height: 76vh; object-fit: contain; display: block; border-radius: 12px; }
+    .g-lb-viewer video { max-width: 100%; max-height: 76vh; border-radius: 12px; display: block; background: #000; }
+    .g-lb-caption { color: #e5e7eb; font-size: 13px; text-align: center; margin-top: 10px; max-width: 700px; }
+    .g-lb-close {
+      position: fixed; top: 14px; right: 18px;
+      width: 42px; height: 42px; border-radius: 50%;
+      background: rgba(223,208,184,.12); color: var(--accent);
+      border: 1px solid rgba(223,208,184,.25);
+      font-size: 18px; display: grid; place-items: center; cursor: pointer; z-index: 10001;
+      transition: background .18s;
     }
-    .memory-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 20px rgba(0,0,0,.35);
+    .g-lb-close:hover { background: rgba(223,208,184,.24); }
+    .g-lb-nav {
+      position: fixed; top: 50%; transform: translateY(-50%);
+      width: 46px; height: 46px; border-radius: 50%;
+      background: rgba(223,208,184,.12); color: var(--accent);
+      border: 1px solid rgba(223,208,184,.22);
+      font-size: 20px; display: grid; place-items: center; cursor: pointer; z-index: 10001;
+      transition: background .18s;
     }
-    .memory-frame,
-    .memory-image,
-    .memory-video {
-        width: 100%;
-        aspect-ratio: 16 / 9;
-        border: 0;
-        display: block;
-        background: #111827;
-        object-fit: cover;
-    }
-    .memory-frame { pointer-events: none; }
-    .memory-caption {
-        display: block;
-        padding: 10px 12px;
-        color: #e5e7eb;
-        font-size: 12px;
-        word-break: break-word;
-        line-height: 1.5;
-        min-height: 38px;
-    }
-    .memory-hint {
-        margin-top: 10px;
-        color: var(--muted);
-        font-size: 12px;
-        text-align: right;
-    }
-    .memory-modal {
-        position: fixed;
-        inset: 0;
-        z-index: 9999;
-        background: rgba(8,10,14,.88);
-        display: none;
-        align-items: center;
-        justify-content: center;
-        padding: 24px;
-        backdrop-filter: blur(8px);
-    }
-    .memory-modal.active { display: flex; }
-    .memory-modal-panel {
-        width: min(1200px, 100%);
-        max-height: 92vh;
-        background: #1f2937;
-        border: 1px solid rgba(223,208,184,.18);
-        border-radius: 16px;
-        overflow: hidden;
-        box-shadow: 0 24px 60px rgba(0,0,0,.45);
-        display: flex;
-        flex-direction: column;
-    }
-    .memory-modal-top {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 10px;
-        padding: 12px 14px;
-        border-bottom: 1px solid rgba(223,208,184,.12);
-        background: #232b35;
-    }
-    .memory-modal-title {
-        color: #fff5e6;
-        font-size: 14px;
-        font-weight: 700;
-    }
-    .memory-modal-sub {
-        color: var(--muted);
-        font-size: 12px;
-        margin-top: 2px;
-    }
-    .memory-close,
-    .memory-nav {
-        width: 42px;
-        height: 42px;
-        border-radius: 999px;
-        border: 1px solid rgba(223,208,184,.2);
-        background: rgba(223,208,184,.08);
-        color: var(--accent);
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 20px;
-        cursor: pointer;
-        flex-shrink: 0;
-    }
-    .memory-close:hover,
-    .memory-nav:hover { background: rgba(223,208,184,.16); }
-    .memory-modal-body {
-        display: grid;
-        grid-template-columns: 54px 1fr 54px;
-        align-items: center;
-        gap: 10px;
-        padding: 14px;
-        min-height: 0;
-    }
-    .memory-modal-viewer {
-        width: 100%;
-        height: min(70vh, 760px);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: #111827;
-        border-radius: 12px;
-        overflow: hidden;
-    }
-    .memory-modal-frame,
-    .memory-modal-image,
-    .memory-modal-video {
-        width: 100%;
-        height: 100%;
-        border: 0;
-        background: #111827;
-        object-fit: contain;
-    }
-    .memory-modal-strip {
-        display: grid;
-        grid-auto-flow: column;
-        grid-auto-columns: minmax(180px, 220px);
-        gap: 10px;
-        overflow-x: auto;
-        padding: 12px 14px 16px;
-        border-top: 1px solid rgba(223,208,184,.12);
-        background: #1b2430;
-    }
-    .memory-thumb {
-        background: #343A42;
-        border-radius: 10px;
-        overflow: hidden;
-        border: 1px solid rgba(223,208,184,.12);
-        cursor: pointer;
-        padding: 0;
-    }
-    .memory-thumb.active {
-        outline: 2px solid var(--accent);
-        outline-offset: -2px;
-    }
-    .memory-thumb img,
-    .memory-thumb iframe,
-    .memory-thumb video {
-        width: 100%;
-        aspect-ratio: 16/9;
-        border: 0;
-        display: block;
-        background: #111827;
-        object-fit: cover;
-        pointer-events: none;
-    }
-    .memory-thumb span {
-        display: block;
-        padding: 8px 10px;
-        font-size: 11px;
-        color: #e5e7eb;
-        line-height: 1.45;
-        min-height: 34px;
-    }
-    @media (max-width: 768px) {
-        .memory-title { font-size: 16px; }
-        .memory-intro { font-size: 12px; }
-        .memory-grid { grid-auto-columns: minmax(210px, 210px); }
-        .memory-card { min-width: 210px; }
-        .memory-modal { padding: 10px; }
-        .memory-modal-panel { max-height: 95vh; }
-        .memory-modal-top { padding: 10px; }
-        .memory-modal-body {
-            grid-template-columns: 42px 1fr 42px;
-            gap: 6px;
-            padding: 10px;
-        }
-        .memory-close, .memory-nav { width: 38px; height: 38px; font-size: 18px; }
-        .memory-modal-viewer { height: min(52vh, 420px); }
-        .memory-modal-strip { grid-auto-columns: minmax(150px, 180px); padding: 10px; }
+    .g-lb-nav:hover { background: rgba(223,208,184,.26); }
+    .g-lb-prev { left: 12px; }
+    .g-lb-next { right: 12px; }
+
+    @media (max-width: 960px) { .gallery-item { flex: 0 0 calc(50% - 6px); } }
+    @media (max-width: 600px) {
+      .gallery-item { flex: 0 0 82%; scroll-snap-align: center; }
+      .gallery-item img, .gallery-item video { aspect-ratio: 16/9; }
+      .g-lb-prev { left: 4px; } .g-lb-next { right: 4px; }
+      .g-lb-nav { width: 36px; height: 36px; font-size: 16px; }
     }
 
-</style>
+  </style>
 </head>
 <body>
   <div class="container">
@@ -1214,26 +1128,135 @@
 
       <section class="memory-section">
         <h3 style="color: #fff5e6; font-size: 20px; margin-bottom: 15px; margin-top: 20px; margin-left:2%;">📸 旅行相簿與影片</h3>
-        <p style="margin-left:2%;" class="memory-intro">點擊任何卡片即可放大觀看</p>
-        <div id="memorySectionMount"></div>
+        <p style="margin-left:2%;" class="memory-intro">點擊圖片可放大 · 左右滑動查看更多</p>
+        <div class="gallery-groups-wrap">
+      <div class="gallery-group">
+        <h4 class="gallery-group-title">📷 住宿</h4>
+        <div class="gallery-shell">
+          <div class="gallery-hint"><span>點擊圖片可放大 · 左右滑動查看更多</span><div class="gallery-dots" aria-hidden="true"><span class="gallery-dot active"></span><span class="gallery-dot"></span></div></div>
+          <div class="gallery-scroll" data-gallery-id="住宿">
+                <figure class="gallery-item" data-idx="0" data-full="https://i.imgur.com/Vpmgl6K.jpeg" data-caption="住宿外觀" data-type="image"><img src="https://i.imgur.com/Vpmgl6K.jpeg" alt="住宿外觀" loading="lazy"><figcaption>住宿外觀</figcaption></figure>
+                <figure class="gallery-item" data-idx="1" data-full="https://i.imgur.com/0vLqclm.jpeg" data-caption="住宿房間" data-type="image"><img src="https://i.imgur.com/0vLqclm.jpeg" alt="住宿房間" loading="lazy"><figcaption>住宿房間</figcaption></figure>
+          </div>
+        </div>
+      </div>
+      <div class="gallery-group">
+        <h4 class="gallery-group-title">📷 玉龍雪山</h4>
+        <div class="gallery-shell">
+          <div class="gallery-hint"><span>點擊圖片可放大 · 左右滑動查看更多</span><div class="gallery-dots" aria-hidden="true"><span class="gallery-dot active"></span><span class="gallery-dot"></span><span class="gallery-dot"></span><span class="gallery-dot"></span><span class="gallery-dot"></span><span class="gallery-dot"></span></div></div>
+          <div class="gallery-scroll" data-gallery-id="玉龍雪山">
+                <figure class="gallery-item" data-idx="0" data-full="https://i.imgur.com/vUnS2Sq.jpeg" data-caption="雪山入口" data-type="image"><img src="https://i.imgur.com/vUnS2Sq.jpeg" alt="雪山入口" loading="lazy"><figcaption>雪山入口</figcaption></figure>
+                <figure class="gallery-item" data-idx="1" data-full="https://i.imgur.com/2nYvOGa.jpeg" data-caption="纜車沿途" data-type="image"><img src="https://i.imgur.com/2nYvOGa.jpeg" alt="纜車沿途" loading="lazy"><figcaption>纜車沿途</figcaption></figure>
+                <figure class="gallery-item" data-idx="2" data-full="https://i.imgur.com/8YYllOp.jpeg" data-caption="高山步道" data-type="image"><img src="https://i.imgur.com/8YYllOp.jpeg" alt="高山步道" loading="lazy"><figcaption>高山步道</figcaption></figure>
+                <figure class="gallery-item" data-idx="3" data-full="https://i.imgur.com/P7hOY62.jpeg" data-caption="雪山觀景" data-type="image"><img src="https://i.imgur.com/P7hOY62.jpeg" alt="雪山觀景" loading="lazy"><figcaption>雪山觀景</figcaption></figure>
+                <figure class="gallery-item" data-idx="4" data-full="https://i.imgur.com/YkwyvsI.jpeg" data-caption="山頂遠景" data-type="image"><img src="https://i.imgur.com/YkwyvsI.jpeg" alt="山頂遠景" loading="lazy"><figcaption>山頂遠景</figcaption></figure>
+                <figure class="gallery-item" data-idx="5" data-full="https://i.imgur.com/jEyrMoE.jpeg" data-caption="冰川平台" data-type="image"><img src="https://i.imgur.com/jEyrMoE.jpeg" alt="冰川平台" loading="lazy"><figcaption>冰川平台</figcaption></figure>
+                <figure class="gallery-item" data-idx="6" data-full="https://i.imgur.com/lYjnvxt.jpeg" data-caption="藍天雪峰" data-type="image"><img src="https://i.imgur.com/lYjnvxt.jpeg" alt="藍天雪峰" loading="lazy"><figcaption>藍天雪峰</figcaption></figure>
+                <figure class="gallery-item" data-idx="7" data-full="https://i.imgur.com/P5okHdf.jpeg" data-caption="棧道風景" data-type="image"><img src="https://i.imgur.com/P5okHdf.jpeg" alt="棧道風景" loading="lazy"><figcaption>棧道風景</figcaption></figure>
+                <figure class="gallery-item" data-idx="8" data-full="https://i.imgur.com/QymDsLh.jpeg" data-caption="雪山合照" data-type="image"><img src="https://i.imgur.com/QymDsLh.jpeg" alt="雪山合照" loading="lazy"><figcaption>雪山合照</figcaption></figure>
+                <figure class="gallery-item" data-idx="9" data-full="https://i.imgur.com/UVg1gxo.jpeg" data-caption="高海拔景觀" data-type="image"><img src="https://i.imgur.com/UVg1gxo.jpeg" alt="高海拔景觀" loading="lazy"><figcaption>高海拔景觀</figcaption></figure>
+                <figure class="gallery-item" data-idx="10" data-full="https://i.imgur.com/1s7XL7V.jpeg" data-caption="雲海山景" data-type="image"><img src="https://i.imgur.com/1s7XL7V.jpeg" alt="雲海山景" loading="lazy"><figcaption>雲海山景</figcaption></figure>
+                <figure class="gallery-item" data-idx="11" data-full="https://i.imgur.com/dVS5gvZ.jpeg" data-caption="回程風光" data-type="image"><img src="https://i.imgur.com/dVS5gvZ.jpeg" alt="回程風光" loading="lazy"><figcaption>回程風光</figcaption></figure>
+                <figure class="gallery-item" data-idx="12" data-full="https://i.imgur.com/BhQTnpL.jpeg" data-caption="山區特寫" data-type="image"><img src="https://i.imgur.com/BhQTnpL.jpeg" alt="山區特寫" loading="lazy"><figcaption>山區特寫</figcaption></figure>
+                <figure class="gallery-item" data-idx="13" data-full="https://i.imgur.com/yq4WPrg.jpeg" data-caption="旅程留影" data-type="image"><img src="https://i.imgur.com/yq4WPrg.jpeg" alt="旅程留影" loading="lazy"><figcaption>旅程留影</figcaption></figure>
+          </div>
+        </div>
+      </div>
+      <div class="gallery-group">
+        <h4 class="gallery-group-title">📷 妙湛寺金剛塔</h4>
+        <div class="gallery-shell">
+          <div class="gallery-hint"><span>點擊圖片可放大 · 左右滑動查看更多</span><div class="gallery-dots" aria-hidden="true"><span class="gallery-dot active"></span><span class="gallery-dot"></span></div></div>
+          <div class="gallery-scroll" data-gallery-id="妙湛寺金剛塔">
+                <figure class="gallery-item" data-idx="0" data-full="https://i.imgur.com/YHTwhWi.jpeg" data-caption="金剛塔全景" data-type="image"><img src="https://i.imgur.com/YHTwhWi.jpeg" alt="金剛塔全景" loading="lazy"><figcaption>金剛塔全景</figcaption></figure>
+                <figure class="gallery-item" data-idx="1" data-full="https://i.imgur.com/jiw4KQc.jpeg" data-caption="寺院建築" data-type="image"><img src="https://i.imgur.com/jiw4KQc.jpeg" alt="寺院建築" loading="lazy"><figcaption>寺院建築</figcaption></figure>
+          </div>
+        </div>
+      </div>
+      <div class="gallery-group">
+        <h4 class="gallery-group-title">📷 洱海</h4>
+        <div class="gallery-shell">
+          <div class="gallery-hint"><span>點擊圖片可放大 · 左右滑動查看更多</span><div class="gallery-dots" aria-hidden="true"><span class="gallery-dot active"></span><span class="gallery-dot"></span><span class="gallery-dot"></span><span class="gallery-dot"></span><span class="gallery-dot"></span><span class="gallery-dot"></span></div></div>
+          <div class="gallery-scroll" data-gallery-id="洱海">
+                <figure class="gallery-item" data-idx="0" data-full="https://i.imgur.com/WpaBDPc.jpeg" data-caption="洱海湖岸" data-type="image"><img src="https://i.imgur.com/WpaBDPc.jpeg" alt="洱海湖岸" loading="lazy"><figcaption>洱海湖岸</figcaption></figure>
+                <figure class="gallery-item" data-idx="1" data-full="https://i.imgur.com/OxbalvB.jpeg" data-caption="湖邊風景" data-type="image"><img src="https://i.imgur.com/OxbalvB.jpeg" alt="湖邊風景" loading="lazy"><figcaption>湖邊風景</figcaption></figure>
+                <figure class="gallery-item" data-idx="2" data-full="https://i.imgur.com/cvFE9xE.jpeg" data-caption="沿途街景" data-type="image"><img src="https://i.imgur.com/cvFE9xE.jpeg" alt="沿途街景" loading="lazy"><figcaption>沿途街景</figcaption></figure>
+                <figure class="gallery-item" data-idx="3" data-full="https://i.imgur.com/0cI3rP5.jpeg" data-caption="海景留影" data-type="image"><img src="https://i.imgur.com/0cI3rP5.jpeg" alt="海景留影" loading="lazy"><figcaption>海景留影</figcaption></figure>
+                <figure class="gallery-item" data-idx="4" data-full="https://i.imgur.com/zcH4IOL.jpeg" data-caption="藍天洱海" data-type="image"><img src="https://i.imgur.com/zcH4IOL.jpeg" alt="藍天洱海" loading="lazy"><figcaption>藍天洱海</figcaption></figure>
+                <figure class="gallery-item" data-idx="5" data-full="https://i.imgur.com/qOJNcyt.jpeg" data-caption="岸邊建築" data-type="image"><img src="https://i.imgur.com/qOJNcyt.jpeg" alt="岸邊建築" loading="lazy"><figcaption>岸邊建築</figcaption></figure>
+                <figure class="gallery-item" data-idx="6" data-full="https://i.imgur.com/YiKBdrB.jpeg" data-caption="旅途片刻" data-type="image"><img src="https://i.imgur.com/YiKBdrB.jpeg" alt="旅途片刻" loading="lazy"><figcaption>旅途片刻</figcaption></figure>
+                <figure class="gallery-item" data-idx="7" data-full="https://i.imgur.com/Zs1llri.jpeg" data-caption="湖光山色" data-type="image"><img src="https://i.imgur.com/Zs1llri.jpeg" alt="湖光山色" loading="lazy"><figcaption>湖光山色</figcaption></figure>
+                <figure class="gallery-item" data-idx="8" data-full="https://i.imgur.com/YAgyw1U.jpeg" data-caption="午後風景" data-type="image"><img src="https://i.imgur.com/YAgyw1U.jpeg" alt="午後風景" loading="lazy"><figcaption>午後風景</figcaption></figure>
+                <figure class="gallery-item" data-idx="9" data-full="https://i.imgur.com/xIws3ex.jpeg" data-caption="洱海回憶" data-type="image"><img src="https://i.imgur.com/xIws3ex.jpeg" alt="洱海回憶" loading="lazy"><figcaption>洱海回憶</figcaption></figure>
+          </div>
+        </div>
+      </div>
+      <div class="gallery-group">
+        <h4 class="gallery-group-title">📷 雲南省博物館</h4>
+        <div class="gallery-shell">
+          <div class="gallery-hint"><span>點擊圖片可放大 · 左右滑動查看更多</span><div class="gallery-dots" aria-hidden="true"><span class="gallery-dot active"></span><span class="gallery-dot"></span><span class="gallery-dot"></span><span class="gallery-dot"></span><span class="gallery-dot"></span><span class="gallery-dot"></span></div></div>
+          <div class="gallery-scroll" data-gallery-id="雲南省博物館">
+                <figure class="gallery-item" data-idx="0" data-full="https://i.imgur.com/DIv8ugX.jpeg" data-caption="博物館外觀" data-type="image"><img src="https://i.imgur.com/DIv8ugX.jpeg" alt="博物館外觀" loading="lazy"><figcaption>博物館外觀</figcaption></figure>
+                <figure class="gallery-item" data-idx="1" data-full="https://i.imgur.com/H6aj9Vr.jpeg" data-caption="展館入口" data-type="image"><img src="https://i.imgur.com/H6aj9Vr.jpeg" alt="展館入口" loading="lazy"><figcaption>展館入口</figcaption></figure>
+                <figure class="gallery-item" data-idx="2" data-full="https://i.imgur.com/tVC7Tbb.jpeg" data-caption="館內展品" data-type="image"><img src="https://i.imgur.com/tVC7Tbb.jpeg" alt="館內展品" loading="lazy"><figcaption>館內展品</figcaption></figure>
+                <figure class="gallery-item" data-idx="3" data-full="https://i.imgur.com/H2eAxoK.jpeg" data-caption="文物展示" data-type="image"><img src="https://i.imgur.com/H2eAxoK.jpeg" alt="文物展示" loading="lazy"><figcaption>文物展示</figcaption></figure>
+                <figure class="gallery-item" data-idx="4" data-full="https://i.imgur.com/zQs4BKt.jpeg" data-caption="展廳細節" data-type="image"><img src="https://i.imgur.com/zQs4BKt.jpeg" alt="展廳細節" loading="lazy"><figcaption>展廳細節</figcaption></figure>
+                <figure class="gallery-item" data-idx="5" data-full="https://i.imgur.com/d7CZ6hc.jpeg" data-caption="文化展區" data-type="image"><img src="https://i.imgur.com/d7CZ6hc.jpeg" alt="文化展區" loading="lazy"><figcaption>文化展區</figcaption></figure>
+                <figure class="gallery-item" data-idx="6" data-full="https://i.imgur.com/T3hkXZ9.jpeg" data-caption="館內光影" data-type="image"><img src="https://i.imgur.com/T3hkXZ9.jpeg" alt="館內光影" loading="lazy"><figcaption>館內光影</figcaption></figure>
+                <figure class="gallery-item" data-idx="7" data-full="https://i.imgur.com/Sp8tVx6.jpeg" data-caption="展覽留影" data-type="image"><img src="https://i.imgur.com/Sp8tVx6.jpeg" alt="展覽留影" loading="lazy"><figcaption>展覽留影</figcaption></figure>
+                <figure class="gallery-item" data-idx="8" data-full="https://i.imgur.com/MA7wo13.jpeg" data-caption="歷史文物" data-type="image"><img src="https://i.imgur.com/MA7wo13.jpeg" alt="歷史文物" loading="lazy"><figcaption>歷史文物</figcaption></figure>
+                <figure class="gallery-item" data-idx="9" data-full="https://i.imgur.com/XgqAiHs.jpeg" data-caption="展廳一角" data-type="image"><img src="https://i.imgur.com/XgqAiHs.jpeg" alt="展廳一角" loading="lazy"><figcaption>展廳一角</figcaption></figure>
+                <figure class="gallery-item" data-idx="10" data-full="https://i.imgur.com/Myj9ut1.jpeg" data-caption="參觀片段" data-type="image"><img src="https://i.imgur.com/Myj9ut1.jpeg" alt="參觀片段" loading="lazy"><figcaption>參觀片段</figcaption></figure>
+                <figure class="gallery-item" data-idx="11" data-full="https://i.imgur.com/YEpHPbn.jpeg" data-caption="博物館回憶" data-type="image"><img src="https://i.imgur.com/YEpHPbn.jpeg" alt="博物館回憶" loading="lazy"><figcaption>博物館回憶</figcaption></figure>
+          </div>
+        </div>
+      </div>
+      <div class="gallery-group">
+        <h4 class="gallery-group-title">📷 麗江古城</h4>
+        <div class="gallery-shell">
+          <div class="gallery-hint"><span>點擊圖片可放大 · 左右滑動查看更多</span><div class="gallery-dots" aria-hidden="true"><span class="gallery-dot active"></span><span class="gallery-dot"></span><span class="gallery-dot"></span><span class="gallery-dot"></span><span class="gallery-dot"></span><span class="gallery-dot"></span></div></div>
+          <div class="gallery-scroll" data-gallery-id="麗江古城">
+                <figure class="gallery-item" data-idx="0" data-full="https://i.imgur.com/SeKIGRC.jpeg" data-caption="古城街景" data-type="image"><img src="https://i.imgur.com/SeKIGRC.jpeg" alt="古城街景" loading="lazy"><figcaption>古城街景</figcaption></figure>
+                <figure class="gallery-item" data-idx="1" data-full="https://i.imgur.com/5dyVxf3.jpeg" data-caption="石板路巷弄" data-type="image"><img src="https://i.imgur.com/5dyVxf3.jpeg" alt="石板路巷弄" loading="lazy"><figcaption>石板路巷弄</figcaption></figure>
+                <figure class="gallery-item" data-idx="2" data-full="https://i.imgur.com/MEj7GOU.jpeg" data-caption="古城夜色" data-type="image"><img src="https://i.imgur.com/MEj7GOU.jpeg" alt="古城夜色" loading="lazy"><figcaption>古城夜色</figcaption></figure>
+                <figure class="gallery-item" data-idx="3" data-full="https://i.imgur.com/AfnualY.jpeg" data-caption="木樓建築" data-type="image"><img src="https://i.imgur.com/AfnualY.jpeg" alt="木樓建築" loading="lazy"><figcaption>木樓建築</figcaption></figure>
+                <figure class="gallery-item" data-idx="4" data-full="https://i.imgur.com/YLud0Bl.jpeg" data-caption="古城角落" data-type="image"><img src="https://i.imgur.com/YLud0Bl.jpeg" alt="古城角落" loading="lazy"><figcaption>古城角落</figcaption></figure>
+                <figure class="gallery-item" data-idx="5" data-full="https://i.imgur.com/fVbdQNS.jpeg" data-caption="旅途街拍" data-type="image"><img src="https://i.imgur.com/fVbdQNS.jpeg" alt="旅途街拍" loading="lazy"><figcaption>旅途街拍</figcaption></figure>
+                <figure class="gallery-item" data-idx="6" data-full="https://i.imgur.com/Yb70ms0.jpeg" data-caption="店舖風景" data-type="image"><img src="https://i.imgur.com/Yb70ms0.jpeg" alt="店舖風景" loading="lazy"><figcaption>店舖風景</figcaption></figure>
+                <figure class="gallery-item" data-idx="7" data-full="https://i.imgur.com/6aqfDWM.jpeg" data-caption="古城人文" data-type="image"><img src="https://i.imgur.com/6aqfDWM.jpeg" alt="古城人文" loading="lazy"><figcaption>古城人文</figcaption></figure>
+                <figure class="gallery-item" data-idx="8" data-full="https://i.imgur.com/lC0e4sR.jpeg" data-caption="晨間古城" data-type="image"><img src="https://i.imgur.com/lC0e4sR.jpeg" alt="晨間古城" loading="lazy"><figcaption>晨間古城</figcaption></figure>
+                <figure class="gallery-item" data-idx="9" data-full="https://i.imgur.com/v7oXlFi.jpeg" data-caption="巷口風光" data-type="image"><img src="https://i.imgur.com/v7oXlFi.jpeg" alt="巷口風光" loading="lazy"><figcaption>巷口風光</figcaption></figure>
+                <figure class="gallery-item" data-idx="10" data-full="https://i.imgur.com/tpypIJ5.jpeg" data-caption="古城留影" data-type="image"><img src="https://i.imgur.com/tpypIJ5.jpeg" alt="古城留影" loading="lazy"><figcaption>古城留影</figcaption></figure>
+                <figure class="gallery-item" data-idx="11" data-full="https://i.imgur.com/Ga3td7m.jpeg" data-caption="小橋流水" data-type="image"><img src="https://i.imgur.com/Ga3td7m.jpeg" alt="小橋流水" loading="lazy"><figcaption>小橋流水</figcaption></figure>
+                <figure class="gallery-item" data-idx="12" data-full="https://i.imgur.com/hAFso0f.jpeg" data-caption="夜晚燈光" data-type="image"><img src="https://i.imgur.com/hAFso0f.jpeg" alt="夜晚燈光" loading="lazy"><figcaption>夜晚燈光</figcaption></figure>
+                <figure class="gallery-item" data-idx="13" data-full="https://i.imgur.com/drnJT07.jpeg" data-caption="麗江回憶" data-type="image"><img src="https://i.imgur.com/drnJT07.jpeg" alt="麗江回憶" loading="lazy"><figcaption>麗江回憶</figcaption></figure>
+          </div>
+        </div>
+      </div>
+      <div class="gallery-group">
+        <h4 class="gallery-group-title">📷 虎跳峽</h4>
+        <div class="gallery-shell">
+          <div class="gallery-hint"><span>點擊圖片可放大 · 左右滑動查看更多</span><div class="gallery-dots" aria-hidden="true"><span class="gallery-dot active"></span><span class="gallery-dot"></span><span class="gallery-dot"></span><span class="gallery-dot"></span><span class="gallery-dot"></span><span class="gallery-dot"></span></div></div>
+          <div class="gallery-scroll" data-gallery-id="虎跳峽">
+                <figure class="gallery-item" data-idx="0" data-full="https://i.imgur.com/0Fagjc5.jpeg" data-caption="峽谷入口" data-type="image"><img src="https://i.imgur.com/0Fagjc5.jpeg" alt="峽谷入口" loading="lazy"><figcaption>峽谷入口</figcaption></figure>
+                <figure class="gallery-item" data-idx="1" data-full="https://i.imgur.com/xHsj8h8.jpeg" data-caption="山谷步道" data-type="image"><img src="https://i.imgur.com/xHsj8h8.jpeg" alt="山谷步道" loading="lazy"><figcaption>山谷步道</figcaption></figure>
+                <figure class="gallery-item" data-idx="2" data-full="https://i.imgur.com/dGxh5vZ.jpeg" data-caption="江水激流" data-type="image"><img src="https://i.imgur.com/dGxh5vZ.jpeg" alt="江水激流" loading="lazy"><figcaption>江水激流</figcaption></figure>
+                <figure class="gallery-item" data-idx="3" data-full="https://i.imgur.com/A8ZnOhW.jpeg" data-caption="峽谷景觀" data-type="image"><img src="https://i.imgur.com/A8ZnOhW.jpeg" alt="峽谷景觀" loading="lazy"><figcaption>峽谷景觀</figcaption></figure>
+                <figure class="gallery-item" data-idx="4" data-full="https://i.imgur.com/GJOOPB9.jpeg" data-caption="山路留影" data-type="image"><img src="https://i.imgur.com/GJOOPB9.jpeg" alt="山路留影" loading="lazy"><figcaption>山路留影</figcaption></figure>
+                <figure class="gallery-item" data-idx="5" data-full="https://i.imgur.com/z2hQKyX.jpeg" data-caption="虎跳峽回憶" data-type="image"><img src="https://i.imgur.com/z2hQKyX.jpeg" alt="虎跳峽回憶" loading="lazy"><figcaption>虎跳峽回憶</figcaption></figure>
+                <figure class="gallery-item gallery-item--video" data-idx="6" data-full="https://i.imgur.com/2whcE04.mp4" data-caption="虎跳峽影片" data-type="video"><video class="gallery-video" src="https://i.imgur.com/2whcE04.mp4" muted loop playsinline preload="metadata"></video><figcaption>🎬 虎跳峽影片</figcaption></figure>
+          </div>
+        </div>
+      </div>
+        </div>
       </section>
 
-      <div id="memoryModal" class="memory-modal" aria-hidden="true">
-        <div class="memory-modal-panel" role="dialog" aria-modal="true" aria-label="旅行相簿放大檢視">
-          <div class="memory-modal-top">
-            <div>
-              <div id="memoryModalTitle" class="memory-modal-title">旅行相簿</div>
-              <div id="memoryModalSub" class="memory-modal-sub"></div>
-            </div>
-            <button id="memoryClose" class="memory-close" type="button" aria-label="關閉">×</button>
-          </div>
-          <div class="memory-modal-body">
-            <button id="memoryPrev" class="memory-nav" type="button" aria-label="上一個">&#10094;</button>
-            <iframe id="memoryModalFrame" class="memory-modal-frame" src="about:blank" allowfullscreen frameborder="0" scrolling="no"></iframe>
-            <button id="memoryNext" class="memory-nav" type="button" aria-label="下一個">&#10095;</button>
-          </div>
-          <div id="memoryModalStrip" class="memory-modal-strip"></div>
-        </div>
+      <!-- Gallery Lightbox -->
+      <div id="galleryLightbox" class="g-lightbox" aria-hidden="true">
+        <button class="g-lb-close" id="gLbClose" aria-label="關閉">&#10005;</button>
+        <button class="g-lb-nav g-lb-prev" id="gLbPrev" aria-label="上一個">&#10094;</button>
+        <div class="g-lb-viewer" id="gLbViewer"></div>
+        <button class="g-lb-nav g-lb-next" id="gLbNext" aria-label="下一個">&#10095;</button>
+        <div class="g-lb-caption" id="gLbCaption"></div>
       </div>
 
     <div class="footer">
@@ -1818,135 +1841,92 @@ const MEMORY_GROUPS = {
   ]
 };
 
-const memoryModal = document.getElementById('memoryModal');
-const memoryModalViewer = document.getElementById('memoryModalViewer');
-const memoryModalTitle = document.getElementById('memoryModalTitle');
-const memoryModalSub = document.getElementById('memoryModalSub');
-const memoryModalStrip = document.getElementById('memoryModalStrip');
-const memoryPrev = document.getElementById('memoryPrev');
-const memoryNext = document.getElementById('memoryNext');
-const memoryClose = document.getElementById('memoryClose');
 
-let memoryState = { groupName: '', items: [], index: 0 };
-
-function getMemoryTitle(groupName, index, item) {
-  if (item.title && item.title.trim()) return item.title.trim();
-  const list = MEMORY_TITLE_MAP[groupName] || [];
-  return list[index] || `${groupName} ${index + 1}`;
-}
-
-function createMediaElement(item, className, title, thumb = false) {
-  if (item.type === 'video') {
-    if (/\.mp4($|\?)/i.test(item.src)) {
-      return `<video class="${className}" src="${item.src}" ${thumb ? '' : 'controls playsinline preload="metadata"'}></video>`;
-    }
-    return `<iframe class="${className}" src="${item.src}" title="${title}" loading="lazy" allowfullscreen frameborder="0" scrolling="no" referrerpolicy="no-referrer-when-downgrade"></iframe>`;
-  }
-  return `<img class="${className}" src="${item.src}" alt="${title}" loading="lazy" referrerpolicy="no-referrer" />`;
-}
-
-function createMemoryCard(item, groupName, index) {
-  const title = getMemoryTitle(groupName, index, item);
-  const className = item.type === 'image' ? 'memory-image' : (/\.mp4($|\?)/i.test(item.src) ? 'memory-video' : 'memory-frame');
-  return `
-    <article class="memory-card" data-memory-group="${groupName}" data-memory-index="${index}" tabindex="0" role="button" aria-label="打開 ${title}">
-      ${createMediaElement(item, className, title)}
-      <span class="memory-caption">${title}</span>
-    </article>
-  `;
-}
-
-function renderMemoryModalStrip() {
-  memoryModalStrip.innerHTML = memoryState.items.map((item, idx) => {
-    const title = getMemoryTitle(memoryState.groupName, idx, item);
-    const className = item.type === 'image' ? '' : '';
-    return `
-      <button class="memory-thumb ${idx === memoryState.index ? 'active' : ''}" type="button" data-thumb-index="${idx}" aria-label="查看 ${title}">
-        ${createMediaElement(item, className, title, true)}
-        <span>${title}</span>
-      </button>
-    `;
-  }).join('');
-
-  memoryModalStrip.querySelectorAll('.memory-thumb').forEach(btn => {
-    btn.addEventListener('click', () => updateMemoryModal(Number(btn.dataset.thumbIndex)));
-  });
-}
-
-function updateMemoryModal(index) {
-  memoryState.index = index;
-  const item = memoryState.items[index];
-  const title = getMemoryTitle(memoryState.groupName, index, item);
-  const mediaClass = item.type === 'image' ? 'memory-modal-image' : (/\.mp4($|\?)/i.test(item.src) ? 'memory-modal-video' : 'memory-modal-frame');
-  memoryModalViewer.innerHTML = createMediaElement(item, mediaClass, title);
-  memoryModalTitle.textContent = memoryState.groupName;
-  memoryModalSub.textContent = `${index + 1} / ${memoryState.items.length} · ${title}`;
-  renderMemoryModalStrip();
-}
-
-function openMemoryModal(groupName, index) {
-  memoryState.groupName = groupName;
-  memoryState.items = MEMORY_GROUPS[groupName] || [];
-  memoryState.index = index;
-  memoryModal.classList.add('active');
-  memoryModal.setAttribute('aria-hidden', 'false');
-  document.body.style.overflow = 'hidden';
-  updateMemoryModal(index);
-}
-
-function closeMemoryModal() {
-  memoryModal.classList.remove('active');
-  memoryModal.setAttribute('aria-hidden', 'true');
-  memoryModalViewer.innerHTML = '';
-  document.body.style.overflow = '';
-}
-
-function stepMemory(delta) {
-  if (!memoryState.items.length) return;
-  const next = (memoryState.index + delta + memoryState.items.length) % memoryState.items.length;
-  updateMemoryModal(next);
-}
-
-function renderMemories(containerId, groups) {
-  const container = document.getElementById(containerId);
-  if (!container) return;
-  container.innerHTML = Object.entries(groups).map(([groupName, items]) => `
-    <section class="memory-block">
-      <div class="memory-head">
-        <h4 class="memory-title">${groupName}</h4>
-        <span class="memory-count">${items.length} 個媒體</span>
-      </div>
-      <div class="memory-grid">
-        ${items.map((item, idx) => createMemoryCard(item, groupName, idx)).join('')}
-      </div>
-      <div class="memory-hint"></div>
-    </section>
-  `).join('');
-
-  container.querySelectorAll('.memory-card').forEach(card => {
-    const open = () => openMemoryModal(card.dataset.memoryGroup, Number(card.dataset.memoryIndex));
-    card.addEventListener('click', open);
-    card.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        open();
+    // ══ Gallery Dots Sync ══
+    document.querySelectorAll('[data-gallery-id]').forEach(function(gallery) {
+      var shell = gallery.closest('.gallery-shell');
+      var dots  = shell ? shell.querySelectorAll('.gallery-dot') : [];
+      if (!dots.length) return;
+      function updateDots() {
+        var iw  = gallery.offsetWidth / 3 || gallery.offsetWidth;
+        var idx = Math.min(Math.round(gallery.scrollLeft / iw), dots.length - 1);
+        dots.forEach(function(d, i) { d.classList.toggle('active', i === idx); });
       }
+      gallery.addEventListener('scroll', updateDots, { passive: true });
+      updateDots();
+      // hover-play video thumbnails
+      gallery.querySelectorAll('.gallery-item--video video').forEach(function(v) {
+        var fig = v.closest('.gallery-item');
+        fig.addEventListener('mouseenter', function() { v.play().catch(function(){}); });
+        fig.addEventListener('mouseleave', function() { v.pause(); v.currentTime = 0; });
+      });
     });
-  });
-}
 
-memoryPrev.addEventListener('click', () => stepMemory(-1));
-memoryNext.addEventListener('click', () => stepMemory(1));
-memoryClose.addEventListener('click', closeMemoryModal);
-memoryModal.addEventListener('click', (e) => { if (e.target === memoryModal) closeMemoryModal(); });
-document.addEventListener('keydown', (e) => {
-  if (!memoryModal.classList.contains('active')) return;
-  if (e.key === 'Escape') closeMemoryModal();
-  if (e.key === 'ArrowLeft') stepMemory(-1);
-  if (e.key === 'ArrowRight') stepMemory(1);
-});
+    // ══ Gallery Lightbox ══
+    (function() {
+      var lb      = document.getElementById('galleryLightbox');
+      var viewer  = document.getElementById('gLbViewer');
+      var caption = document.getElementById('gLbCaption');
+      var btnClose= document.getElementById('gLbClose');
+      var btnPrev = document.getElementById('gLbPrev');
+      var btnNext = document.getElementById('gLbNext');
+      if (!lb) return;
 
-renderMemories('memorySectionMount', MEMORY_GROUPS);
+      var lbItems = [], lbIdx = 0;
+
+      function showItem(idx) {
+        lbIdx = ((idx % lbItems.length) + lbItems.length) % lbItems.length;
+        var item = lbItems[lbIdx];
+        viewer.innerHTML = '';
+        if (item.type === 'video') {
+          var vid = document.createElement('video');
+          vid.src = item.src; vid.controls = true;
+          vid.autoplay = true; vid.loop = true;
+          vid.style.cssText = 'max-width:100%;max-height:76vh;border-radius:12px;display:block;background:#000;';
+          viewer.appendChild(vid);
+        } else {
+          var img = document.createElement('img');
+          img.src = item.src; img.alt = item.caption;
+          viewer.appendChild(img);
+        }
+        caption.textContent = item.caption + '　(' + (lbIdx + 1) + ' / ' + lbItems.length + ')';
+      }
+
+      function openLb(figure) {
+        var scroll = figure.closest('.gallery-scroll');
+        lbItems = Array.from(scroll.querySelectorAll('.gallery-item')).map(function(f) {
+          return { type: f.dataset.type || 'image', src: f.dataset.full, caption: f.dataset.caption || '' };
+        });
+        showItem(parseInt(figure.dataset.idx) || 0);
+        lb.classList.add('active');
+        lb.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        btnClose.focus();
+      }
+
+      function closeLb() {
+        lb.classList.remove('active');
+        lb.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        viewer.innerHTML = '';
+      }
+
+      document.querySelectorAll('.gallery-item').forEach(function(fig) {
+        fig.addEventListener('click', function() { openLb(fig); });
+      });
+      btnClose.addEventListener('click', closeLb);
+      btnPrev.addEventListener('click',  function() { showItem(lbIdx - 1); });
+      btnNext.addEventListener('click',  function() { showItem(lbIdx + 1); });
+      lb.addEventListener('click', function(e) { if (e.target === lb) closeLb(); });
+      document.addEventListener('keydown', function(e) {
+        if (!lb.classList.contains('active')) return;
+        if (e.key === 'ArrowLeft')  showItem(lbIdx - 1);
+        if (e.key === 'ArrowRight') showItem(lbIdx + 1);
+        if (e.key === 'Escape')     closeLb();
+      });
+    })();
+
+
 
 </script>
 </body>
