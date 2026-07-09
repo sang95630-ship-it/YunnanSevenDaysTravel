@@ -3,6 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://i.imgur.com" crossorigin />
+  <link rel="preconnect" href="https://ak-d.tripcdn.com" crossorigin />
+  <link rel="preconnect" href="https://www.google.com" />
   <title>雲南 7 天旅行</title>
   <style>
     :root {
@@ -30,7 +33,7 @@
         background: var(--card);
         border-radius: 16px;
         box-shadow: 0 20px 60px rgba(0,0,0,.5);
-        overflow: hidden;
+        overflow: clip;   /* clip 不會建立捲動容器，sticky 導覽列才能生效 */
     }
     .header {
         background: linear-gradient(135deg, var(--g1), var(--g2) 55%, var(--g3));
@@ -173,7 +176,8 @@
         display: flex;
     }
     .photoMain {
-        height: 50%;
+        flex: 1;
+        min-height: 0;
         position: relative;
         background: #111827;
         display: flex;
@@ -183,7 +187,7 @@
     }
     .photoMain img {
         max-width: 100%;
-        max-height: 180%;
+        max-height: 100%;
         object-fit: contain;
         display: block;
     }
@@ -211,7 +215,8 @@
     .navArrow.left1 { left: 14px; }
     .navArrow.right { right: 14px; }
     .photoStrip {
-        height: 6%;
+        height: 72px;
+        flex: 0 0 auto;
         background: #1f2937;
         border-top: 1px solid rgba(223,208,184,.15);
         padding: 4px;
@@ -459,10 +464,10 @@
   .day-header {
     margin: 0 0 12px 0;
     padding-bottom: 8px;
-    border-bottom: 2px solid #2d7a5f;
+    border-bottom: 2px solid rgba(223,208,184,.45);
     font-size: 16px;
     font-weight: 700;
-    color: #524944; 
+    color: var(--accent);
   }
 
   .itinerary-table {
@@ -485,16 +490,16 @@
 
   .itinerary-table tbody td {
     padding: 8px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid rgba(223,208,184,.12);
     vertical-align: top;
     color: #d1d5db;
   }
   
   .itinerary-table tbody tr:last-child td { border-bottom: none; }
 
-  .time-col { width: 60px; font-weight: 500; color: #2d7a5f; }
-  .highlight { font-weight: 700; color: #000; }
-  .note { color: #666; font-size: 12px; }
+  .time-col { width: 60px; font-weight: 500; color: #9FCDB4; }
+  .highlight { font-weight: 700; color: #FFE9C7; }
+  .note { color: #9CA3AF; font-size: 12px; }
 	
 	
 	
@@ -763,6 +768,61 @@
       .g-lb-nav { width: 36px; height: 36px; font-size: 16px; }
     }
 
+    /* ══ 頂部黏性導覽列 ══ */
+    html { scroll-behavior: smooth; }
+    #planSection, #overviewSection, #memorySection { scroll-margin-top: 66px; }
+    .topNav {
+        position: sticky;
+        top: 0;
+        z-index: 60;
+        display: flex;
+        gap: 8px;
+        padding: 10px 18px;
+        background: rgba(34,40,49,.92);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border-bottom: 1px solid rgba(223,208,184,.15);
+        overflow-x: auto;
+    }
+    .topNav a {
+        flex: 0 0 auto;
+        text-decoration: none;
+        color: #e5e7eb;
+        font-size: 13px;
+        font-weight: 650;
+        padding: 8px 14px;
+        border-radius: 999px;
+        border: 1px solid rgba(223,208,184,.18);
+        background: rgba(223,208,184,.06);
+        transition: .2s;
+        white-space: nowrap;
+    }
+    .topNav a:hover { background: rgba(223,208,184,.16); }
+    .topNav a.active {
+        background: var(--accent);
+        color: #111827;
+        border-color: var(--accent);
+    }
+    /* ══ 鍵盤操作：焦點可見性 ══ */
+    .dayBtn:focus-visible, .itemBtn:focus-visible, .aBtn:focus-visible,
+    .topNav a:focus-visible, .gallery-item:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+    }
+    /* ══ 手機版：每日行程改為橫向滑動卡片 ══ */
+    .dayList { display: flex; flex-direction: column; }
+    @media (max-width: 768px) {
+        .dayList { flex-direction: row; overflow-x: auto; gap: 8px; padding-bottom: 6px; -webkit-overflow-scrolling: touch; scroll-snap-type: x proximity; }
+        .dayList .dayBtn { flex: 0 0 250px; margin-bottom: 0; scroll-snap-align: start; }
+        .dayList .dayBtn:hover { transform: none; }
+    }
+    /* ══ 相簿數量標籤 / 行程變更備註 ══ */
+    .gallery-count { font-size: 11px; color: var(--muted); margin-left: 8px; font-weight: 400; }
+    .change-note { color: #FFB4A2 !important; font-weight: 600; }
+    @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+        * { transition: none !important; animation: none !important; }
+    }
   </style>
 </head>
 <body>
@@ -772,38 +832,47 @@
       <p>行程：昆明（Day1-3）→ 大理（Day3-5）→ 麗江（Day5-7）｜ 2026/03/12–03/18</p>
     </div>
 
-    <div class="main">
+    <nav class="topNav" id="topNav" aria-label="頁面導覽">
+      <a href="#planSection" class="active">🗺️ 行程地圖</a>
+      <a href="#overviewSection">📊 旅行概況</a>
+      <a href="#memorySection">📸 旅行相簿</a>
+    </nav>
+
+    <div class="main" id="planSection">
       <aside class="left">
         <div class="sectionTitle">每日行程</div>
 
-        <div class="dayBtn active" data-day="1">
+        <div class="dayList">
+        <div class="dayBtn active" data-day="1" role="button" tabindex="0">
           <strong>Day 1｜星期四｜12/3｜深圳 → 昆明</strong>
           <small>翠湖公園、圓通禪寺</small>
         </div>
-        <div class="dayBtn" data-day="2">
+        <div class="dayBtn" data-day="2" role="button" tabindex="0">
           <strong>Day 2｜星期五｜13/3｜昆明</strong>
           <small>雲南省博物館、官渡古鎮</small>
         </div>
-        <div class="dayBtn" data-day="3">
+        <div class="dayBtn" data-day="3" role="button" tabindex="0">
           <strong>Day 3｜星期六｜14/3｜昆明 → 大理</strong>
           <small>11:44 D3832 高鐵往大理、大理古城、崇聖寺三塔、蒼山</small>
         </div>
-        <div class="dayBtn" data-day="4">
+        <div class="dayBtn" data-day="4" role="button" tabindex="0">
           <strong>Day 4｜星期日｜15/3｜大理</strong>
           <small>洱海一日遊</small>
         </div>
-        <div class="dayBtn" data-day="5">
+        <div class="dayBtn" data-day="5" role="button" tabindex="0">
           <strong>Day 5｜星期一｜16/3｜大理 → 麗江</strong>
           <small>07:45 C985 高鐵往麗江、麗江古城</small>
         </div>
-        <div class="dayBtn" data-day="6">
+        <div class="dayBtn" data-day="6" role="button" tabindex="0">
           <strong>Day 6｜星期二｜17/3｜玉龍雪山</strong>
           <small>玉龍雪山、藍月谷（一日遊）</small>
         </div>
-        <div class="dayBtn" data-day="7">
+        <div class="dayBtn" data-day="7" role="button" tabindex="0">
           <strong>Day 7｜星期三｜18/3｜束河 (取消) → 深圳</strong>
           <small>束河古鎮、麗江機場夜機</small>
         </div>
+
+        </div><!-- /dayList -->
 
         <div class="sectionTitle">當日景點（點擊切換）</div>
         <div id="poiList" class="poiList"></div>
@@ -819,7 +888,7 @@
           <div class="actions">
             <a id="btnMap" class="aBtn active" href="javascript:void(0)">地圖</a>
             <a id="btnPhotos" class="aBtn" href="javascript:void(0)">相片</a>
-            <!--<a id="openAction" class="aBtn" target="_blank" rel="noopener">在新分頁開啟</a>-->
+            <a id="openAction" class="aBtn" target="_blank" rel="noopener" href="https://maps.google.com">在新分頁開啟地圖</a>
           </div>
         </div>
 
@@ -845,18 +914,19 @@
       </section>
     </div>
 
-    <div class="details-section">
+    <div class="details-section" id="overviewSection">
       <h3 style="color: #fff5e6; font-size: 24px; margin-bottom: 10px;">📊 旅行概況</h3>
       <div class="stats-bar">
           <div class="stat"><strong>7</strong><span>天數</span></div>
           <div class="stat"><strong>5</strong><span>人團隊</span></div>
           <div class="stat"><strong>3</strong><span>座城市</span></div>
           <!--<div class="stat"><strong>HKD 18,500</strong><span>總預算</span></div>-->
-          <div class="stat"><strong>HKD ?</strong><span>總預算</span></div>
+          <div class="stat"><strong>待定</strong><span>總預算</span></div>
           <div class="stat"><strong>4</strong><span>核心景點</span></div>
       </div>
 
-      <!-- Interactive Hotels moved here as requested -->
+      <h3 style="color: #fff5e6; font-size: 20px; margin-bottom: 15px; margin-top: 20px;">🏨 住宿推薦（點擊卡片看房）</h3>
+      <div class="details-grid" id="hotelMainList"></div>
 
       <h3 style="color: #fff5e6; font-size: 20px; margin-bottom: 15px; margin-top: 20px;">🚀 交通路線</h3>
 	  <div class="details-grid">
@@ -1100,7 +1170,7 @@
         <tr><td class="time-col">12:30</td><td>午餐</td><td class="note">束河美食</td></tr>
         <tr><td class="time-col">18:00</td><td>抵達機場</td><td class="note">預留安檢時間</td></tr>
         <tr><td class="time-col highlight">21:55</td><td class="highlight">HO1946 飛深圳</td><td class="note">00:20 抵達</td></tr>
-		<tr><td class="time-col highlight"></td><td class="highlight">最後取消束河古鎮轉去虎跳峽</td><td class="note"></td></tr>
+		<tr><td colspan="3" class="note change-note">⚠️ 行程變更：當日取消束河古鎮，改往虎跳峽一日遊</td></tr>
       </tbody>
     </table>
   </div>
@@ -1129,128 +1199,10 @@
     </div>
 
 
-      <section class="memory-section">
+      <section class="memory-section" id="memorySection">
         <h3 style="color: #fff5e6; font-size: 20px; margin-bottom: 15px; margin-top: 20px; margin-left:2%;">📸 旅行相簿與影片</h3>
         <p style="margin-left:2%;" class="memory-intro">點擊圖片可放大 · 左右滑動查看更多</p>
-        <div class="gallery-groups-wrap">
-      <div class="gallery-group">
-        <h4 class="gallery-group-title">📷 住宿</h4>
-        <div class="gallery-shell">
-          <div class="gallery-hint"><span>點擊圖片可放大 · 左右滑動查看更多</span><div class="gallery-dots" aria-hidden="true"><span class="gallery-dot active"></span><span class="gallery-dot"></span></div></div>
-          <div class="gallery-scroll" data-gallery-id="住宿">
-                <figure class="gallery-item" data-idx="0" data-full="https://i.imgur.com/Vpmgl6K.jpeg" data-caption="住宿外觀" data-type="image"><img src="https://i.imgur.com/Vpmgl6K.jpeg" alt="住宿外觀" loading="lazy"><figcaption>住宿外觀</figcaption></figure>
-                <figure class="gallery-item" data-idx="1" data-full="https://i.imgur.com/0vLqclm.jpeg" data-caption="住宿房間" data-type="image"><img src="https://i.imgur.com/0vLqclm.jpeg" alt="住宿房間" loading="lazy"><figcaption>住宿房間</figcaption></figure>
-          </div>
-        </div>
-      </div>
-      <div class="gallery-group">
-        <h4 class="gallery-group-title">📷 玉龍雪山</h4>
-        <div class="gallery-shell">
-          <div class="gallery-hint"><span>點擊圖片可放大 · 左右滑動查看更多</span><div class="gallery-dots" aria-hidden="true"><span class="gallery-dot active"></span><span class="gallery-dot"></span><span class="gallery-dot"></span><span class="gallery-dot"></span><span class="gallery-dot"></span><span class="gallery-dot"></span></div></div>
-          <div class="gallery-scroll" data-gallery-id="玉龍雪山">
-                <figure class="gallery-item" data-idx="0" data-full="https://i.imgur.com/vUnS2Sq.jpeg" data-caption="雪山入口" data-type="image"><img src="https://i.imgur.com/vUnS2Sq.jpeg" alt="雪山入口" loading="lazy"><figcaption>雪山入口</figcaption></figure>
-                <figure class="gallery-item" data-idx="1" data-full="https://i.imgur.com/2nYvOGa.jpeg" data-caption="纜車沿途" data-type="image"><img src="https://i.imgur.com/2nYvOGa.jpeg" alt="纜車沿途" loading="lazy"><figcaption>纜車沿途</figcaption></figure>
-                <figure class="gallery-item" data-idx="2" data-full="https://i.imgur.com/8YYllOp.jpeg" data-caption="高山步道" data-type="image"><img src="https://i.imgur.com/8YYllOp.jpeg" alt="高山步道" loading="lazy"><figcaption>高山步道</figcaption></figure>
-                <figure class="gallery-item" data-idx="3" data-full="https://i.imgur.com/P7hOY62.jpeg" data-caption="雪山觀景" data-type="image"><img src="https://i.imgur.com/P7hOY62.jpeg" alt="雪山觀景" loading="lazy"><figcaption>雪山觀景</figcaption></figure>
-                <figure class="gallery-item" data-idx="4" data-full="https://i.imgur.com/YkwyvsI.jpeg" data-caption="山頂遠景" data-type="image"><img src="https://i.imgur.com/YkwyvsI.jpeg" alt="山頂遠景" loading="lazy"><figcaption>山頂遠景</figcaption></figure>
-                <figure class="gallery-item" data-idx="5" data-full="https://i.imgur.com/jEyrMoE.jpeg" data-caption="冰川平台" data-type="image"><img src="https://i.imgur.com/jEyrMoE.jpeg" alt="冰川平台" loading="lazy"><figcaption>冰川平台</figcaption></figure>
-                <figure class="gallery-item" data-idx="6" data-full="https://i.imgur.com/lYjnvxt.jpeg" data-caption="藍天雪峰" data-type="image"><img src="https://i.imgur.com/lYjnvxt.jpeg" alt="藍天雪峰" loading="lazy"><figcaption>藍天雪峰</figcaption></figure>
-                <figure class="gallery-item" data-idx="7" data-full="https://i.imgur.com/P5okHdf.jpeg" data-caption="棧道風景" data-type="image"><img src="https://i.imgur.com/P5okHdf.jpeg" alt="棧道風景" loading="lazy"><figcaption>棧道風景</figcaption></figure>
-                <figure class="gallery-item" data-idx="8" data-full="https://i.imgur.com/QymDsLh.jpeg" data-caption="雪山合照" data-type="image"><img src="https://i.imgur.com/QymDsLh.jpeg" alt="雪山合照" loading="lazy"><figcaption>雪山合照</figcaption></figure>
-                <figure class="gallery-item" data-idx="9" data-full="https://i.imgur.com/UVg1gxo.jpeg" data-caption="高海拔景觀" data-type="image"><img src="https://i.imgur.com/UVg1gxo.jpeg" alt="高海拔景觀" loading="lazy"><figcaption>高海拔景觀</figcaption></figure>
-                <figure class="gallery-item" data-idx="10" data-full="https://i.imgur.com/1s7XL7V.jpeg" data-caption="雲海山景" data-type="image"><img src="https://i.imgur.com/1s7XL7V.jpeg" alt="雲海山景" loading="lazy"><figcaption>雲海山景</figcaption></figure>
-                <figure class="gallery-item" data-idx="11" data-full="https://i.imgur.com/dVS5gvZ.jpeg" data-caption="回程風光" data-type="image"><img src="https://i.imgur.com/dVS5gvZ.jpeg" alt="回程風光" loading="lazy"><figcaption>回程風光</figcaption></figure>
-                <figure class="gallery-item" data-idx="12" data-full="https://i.imgur.com/BhQTnpL.jpeg" data-caption="山區特寫" data-type="image"><img src="https://i.imgur.com/BhQTnpL.jpeg" alt="山區特寫" loading="lazy"><figcaption>山區特寫</figcaption></figure>
-                <figure class="gallery-item" data-idx="13" data-full="https://i.imgur.com/yq4WPrg.jpeg" data-caption="旅程留影" data-type="image"><img src="https://i.imgur.com/yq4WPrg.jpeg" alt="旅程留影" loading="lazy"><figcaption>旅程留影</figcaption></figure>
-          </div>
-        </div>
-      </div>
-      <div class="gallery-group">
-        <h4 class="gallery-group-title">📷 妙湛寺金剛塔</h4>
-        <div class="gallery-shell">
-          <div class="gallery-hint"><span>點擊圖片可放大 · 左右滑動查看更多</span><div class="gallery-dots" aria-hidden="true"><span class="gallery-dot active"></span><span class="gallery-dot"></span></div></div>
-          <div class="gallery-scroll" data-gallery-id="妙湛寺金剛塔">
-                <figure class="gallery-item" data-idx="0" data-full="https://i.imgur.com/YHTwhWi.jpeg" data-caption="金剛塔全景" data-type="image"><img src="https://i.imgur.com/YHTwhWi.jpeg" alt="金剛塔全景" loading="lazy"><figcaption>金剛塔全景</figcaption></figure>
-                <figure class="gallery-item" data-idx="1" data-full="https://i.imgur.com/jiw4KQc.jpeg" data-caption="寺院建築" data-type="image"><img src="https://i.imgur.com/jiw4KQc.jpeg" alt="寺院建築" loading="lazy"><figcaption>寺院建築</figcaption></figure>
-          </div>
-        </div>
-      </div>
-      <div class="gallery-group">
-        <h4 class="gallery-group-title">📷 洱海</h4>
-        <div class="gallery-shell">
-          <div class="gallery-hint"><span>點擊圖片可放大 · 左右滑動查看更多</span><div class="gallery-dots" aria-hidden="true"><span class="gallery-dot active"></span><span class="gallery-dot"></span><span class="gallery-dot"></span><span class="gallery-dot"></span><span class="gallery-dot"></span><span class="gallery-dot"></span></div></div>
-          <div class="gallery-scroll" data-gallery-id="洱海">
-                <figure class="gallery-item" data-idx="0" data-full="https://i.imgur.com/WpaBDPc.jpeg" data-caption="洱海湖岸" data-type="image"><img src="https://i.imgur.com/WpaBDPc.jpeg" alt="洱海湖岸" loading="lazy"><figcaption>洱海湖岸</figcaption></figure>
-                <figure class="gallery-item" data-idx="1" data-full="https://i.imgur.com/OxbalvB.jpeg" data-caption="湖邊風景" data-type="image"><img src="https://i.imgur.com/OxbalvB.jpeg" alt="湖邊風景" loading="lazy"><figcaption>湖邊風景</figcaption></figure>
-                <figure class="gallery-item" data-idx="2" data-full="https://i.imgur.com/cvFE9xE.jpeg" data-caption="沿途街景" data-type="image"><img src="https://i.imgur.com/cvFE9xE.jpeg" alt="沿途街景" loading="lazy"><figcaption>沿途街景</figcaption></figure>
-                <figure class="gallery-item" data-idx="3" data-full="https://i.imgur.com/0cI3rP5.jpeg" data-caption="海景留影" data-type="image"><img src="https://i.imgur.com/0cI3rP5.jpeg" alt="海景留影" loading="lazy"><figcaption>海景留影</figcaption></figure>
-                <figure class="gallery-item" data-idx="4" data-full="https://i.imgur.com/zcH4IOL.jpeg" data-caption="藍天洱海" data-type="image"><img src="https://i.imgur.com/zcH4IOL.jpeg" alt="藍天洱海" loading="lazy"><figcaption>藍天洱海</figcaption></figure>
-                <figure class="gallery-item" data-idx="5" data-full="https://i.imgur.com/qOJNcyt.jpeg" data-caption="岸邊建築" data-type="image"><img src="https://i.imgur.com/qOJNcyt.jpeg" alt="岸邊建築" loading="lazy"><figcaption>岸邊建築</figcaption></figure>
-                <figure class="gallery-item" data-idx="6" data-full="https://i.imgur.com/YiKBdrB.jpeg" data-caption="旅途片刻" data-type="image"><img src="https://i.imgur.com/YiKBdrB.jpeg" alt="旅途片刻" loading="lazy"><figcaption>旅途片刻</figcaption></figure>
-                <figure class="gallery-item" data-idx="7" data-full="https://i.imgur.com/Zs1llri.jpeg" data-caption="湖光山色" data-type="image"><img src="https://i.imgur.com/Zs1llri.jpeg" alt="湖光山色" loading="lazy"><figcaption>湖光山色</figcaption></figure>
-                <figure class="gallery-item" data-idx="8" data-full="https://i.imgur.com/YAgyw1U.jpeg" data-caption="午後風景" data-type="image"><img src="https://i.imgur.com/YAgyw1U.jpeg" alt="午後風景" loading="lazy"><figcaption>午後風景</figcaption></figure>
-                <figure class="gallery-item" data-idx="9" data-full="https://i.imgur.com/xIws3ex.jpeg" data-caption="洱海回憶" data-type="image"><img src="https://i.imgur.com/xIws3ex.jpeg" alt="洱海回憶" loading="lazy"><figcaption>洱海回憶</figcaption></figure>
-          </div>
-        </div>
-      </div>
-      <div class="gallery-group">
-        <h4 class="gallery-group-title">📷 雲南省博物館</h4>
-        <div class="gallery-shell">
-          <div class="gallery-hint"><span>點擊圖片可放大 · 左右滑動查看更多</span><div class="gallery-dots" aria-hidden="true"><span class="gallery-dot active"></span><span class="gallery-dot"></span><span class="gallery-dot"></span><span class="gallery-dot"></span><span class="gallery-dot"></span><span class="gallery-dot"></span></div></div>
-          <div class="gallery-scroll" data-gallery-id="雲南省博物館">
-                <figure class="gallery-item" data-idx="0" data-full="https://i.imgur.com/DIv8ugX.jpeg" data-caption="博物館外觀" data-type="image"><img src="https://i.imgur.com/DIv8ugX.jpeg" alt="博物館外觀" loading="lazy"><figcaption>博物館外觀</figcaption></figure>
-                <figure class="gallery-item" data-idx="1" data-full="https://i.imgur.com/H6aj9Vr.jpeg" data-caption="展館入口" data-type="image"><img src="https://i.imgur.com/H6aj9Vr.jpeg" alt="展館入口" loading="lazy"><figcaption>展館入口</figcaption></figure>
-                <figure class="gallery-item" data-idx="2" data-full="https://i.imgur.com/tVC7Tbb.jpeg" data-caption="館內展品" data-type="image"><img src="https://i.imgur.com/tVC7Tbb.jpeg" alt="館內展品" loading="lazy"><figcaption>館內展品</figcaption></figure>
-                <figure class="gallery-item" data-idx="3" data-full="https://i.imgur.com/H2eAxoK.jpeg" data-caption="文物展示" data-type="image"><img src="https://i.imgur.com/H2eAxoK.jpeg" alt="文物展示" loading="lazy"><figcaption>文物展示</figcaption></figure>
-                <figure class="gallery-item" data-idx="4" data-full="https://i.imgur.com/zQs4BKt.jpeg" data-caption="展廳細節" data-type="image"><img src="https://i.imgur.com/zQs4BKt.jpeg" alt="展廳細節" loading="lazy"><figcaption>展廳細節</figcaption></figure>
-                <figure class="gallery-item" data-idx="5" data-full="https://i.imgur.com/d7CZ6hc.jpeg" data-caption="文化展區" data-type="image"><img src="https://i.imgur.com/d7CZ6hc.jpeg" alt="文化展區" loading="lazy"><figcaption>文化展區</figcaption></figure>
-                <figure class="gallery-item" data-idx="6" data-full="https://i.imgur.com/T3hkXZ9.jpeg" data-caption="館內光影" data-type="image"><img src="https://i.imgur.com/T3hkXZ9.jpeg" alt="館內光影" loading="lazy"><figcaption>館內光影</figcaption></figure>
-                <figure class="gallery-item" data-idx="7" data-full="https://i.imgur.com/Sp8tVx6.jpeg" data-caption="展覽留影" data-type="image"><img src="https://i.imgur.com/Sp8tVx6.jpeg" alt="展覽留影" loading="lazy"><figcaption>展覽留影</figcaption></figure>
-                <figure class="gallery-item" data-idx="8" data-full="https://i.imgur.com/MA7wo13.jpeg" data-caption="歷史文物" data-type="image"><img src="https://i.imgur.com/MA7wo13.jpeg" alt="歷史文物" loading="lazy"><figcaption>歷史文物</figcaption></figure>
-                <figure class="gallery-item" data-idx="9" data-full="https://i.imgur.com/XgqAiHs.jpeg" data-caption="展廳一角" data-type="image"><img src="https://i.imgur.com/XgqAiHs.jpeg" alt="展廳一角" loading="lazy"><figcaption>展廳一角</figcaption></figure>
-                <figure class="gallery-item" data-idx="10" data-full="https://i.imgur.com/Myj9ut1.jpeg" data-caption="參觀片段" data-type="image"><img src="https://i.imgur.com/Myj9ut1.jpeg" alt="參觀片段" loading="lazy"><figcaption>參觀片段</figcaption></figure>
-                <figure class="gallery-item" data-idx="11" data-full="https://i.imgur.com/YEpHPbn.jpeg" data-caption="博物館回憶" data-type="image"><img src="https://i.imgur.com/YEpHPbn.jpeg" alt="博物館回憶" loading="lazy"><figcaption>博物館回憶</figcaption></figure>
-          </div>
-        </div>
-      </div>
-      <div class="gallery-group">
-        <h4 class="gallery-group-title">📷 麗江古城</h4>
-        <div class="gallery-shell">
-          <div class="gallery-hint"><span>點擊圖片可放大 · 左右滑動查看更多</span><div class="gallery-dots" aria-hidden="true"><span class="gallery-dot active"></span><span class="gallery-dot"></span><span class="gallery-dot"></span><span class="gallery-dot"></span><span class="gallery-dot"></span><span class="gallery-dot"></span></div></div>
-          <div class="gallery-scroll" data-gallery-id="麗江古城">
-                <figure class="gallery-item" data-idx="0" data-full="https://i.imgur.com/SeKIGRC.jpeg" data-caption="古城街景" data-type="image"><img src="https://i.imgur.com/SeKIGRC.jpeg" alt="古城街景" loading="lazy"><figcaption>古城街景</figcaption></figure>
-                <figure class="gallery-item" data-idx="1" data-full="https://i.imgur.com/5dyVxf3.jpeg" data-caption="石板路巷弄" data-type="image"><img src="https://i.imgur.com/5dyVxf3.jpeg" alt="石板路巷弄" loading="lazy"><figcaption>石板路巷弄</figcaption></figure>
-                <figure class="gallery-item" data-idx="2" data-full="https://i.imgur.com/MEj7GOU.jpeg" data-caption="古城夜色" data-type="image"><img src="https://i.imgur.com/MEj7GOU.jpeg" alt="古城夜色" loading="lazy"><figcaption>古城夜色</figcaption></figure>
-                <figure class="gallery-item" data-idx="3" data-full="https://i.imgur.com/AfnualY.jpeg" data-caption="木樓建築" data-type="image"><img src="https://i.imgur.com/AfnualY.jpeg" alt="木樓建築" loading="lazy"><figcaption>木樓建築</figcaption></figure>
-                <figure class="gallery-item" data-idx="4" data-full="https://i.imgur.com/YLud0Bl.jpeg" data-caption="古城角落" data-type="image"><img src="https://i.imgur.com/YLud0Bl.jpeg" alt="古城角落" loading="lazy"><figcaption>古城角落</figcaption></figure>
-                <figure class="gallery-item" data-idx="5" data-full="https://i.imgur.com/fVbdQNS.jpeg" data-caption="旅途街拍" data-type="image"><img src="https://i.imgur.com/fVbdQNS.jpeg" alt="旅途街拍" loading="lazy"><figcaption>旅途街拍</figcaption></figure>
-                <figure class="gallery-item" data-idx="6" data-full="https://i.imgur.com/Yb70ms0.jpeg" data-caption="店舖風景" data-type="image"><img src="https://i.imgur.com/Yb70ms0.jpeg" alt="店舖風景" loading="lazy"><figcaption>店舖風景</figcaption></figure>
-                <figure class="gallery-item" data-idx="7" data-full="https://i.imgur.com/6aqfDWM.jpeg" data-caption="古城人文" data-type="image"><img src="https://i.imgur.com/6aqfDWM.jpeg" alt="古城人文" loading="lazy"><figcaption>古城人文</figcaption></figure>
-                <figure class="gallery-item" data-idx="8" data-full="https://i.imgur.com/lC0e4sR.jpeg" data-caption="晨間古城" data-type="image"><img src="https://i.imgur.com/lC0e4sR.jpeg" alt="晨間古城" loading="lazy"><figcaption>晨間古城</figcaption></figure>
-                <figure class="gallery-item" data-idx="9" data-full="https://i.imgur.com/v7oXlFi.jpeg" data-caption="巷口風光" data-type="image"><img src="https://i.imgur.com/v7oXlFi.jpeg" alt="巷口風光" loading="lazy"><figcaption>巷口風光</figcaption></figure>
-                <figure class="gallery-item" data-idx="10" data-full="https://i.imgur.com/tpypIJ5.jpeg" data-caption="古城留影" data-type="image"><img src="https://i.imgur.com/tpypIJ5.jpeg" alt="古城留影" loading="lazy"><figcaption>古城留影</figcaption></figure>
-                <figure class="gallery-item" data-idx="11" data-full="https://i.imgur.com/Ga3td7m.jpeg" data-caption="小橋流水" data-type="image"><img src="https://i.imgur.com/Ga3td7m.jpeg" alt="小橋流水" loading="lazy"><figcaption>小橋流水</figcaption></figure>
-                <figure class="gallery-item" data-idx="12" data-full="https://i.imgur.com/hAFso0f.jpeg" data-caption="夜晚燈光" data-type="image"><img src="https://i.imgur.com/hAFso0f.jpeg" alt="夜晚燈光" loading="lazy"><figcaption>夜晚燈光</figcaption></figure>
-                <figure class="gallery-item" data-idx="13" data-full="https://i.imgur.com/drnJT07.jpeg" data-caption="麗江回憶" data-type="image"><img src="https://i.imgur.com/drnJT07.jpeg" alt="麗江回憶" loading="lazy"><figcaption>麗江回憶</figcaption></figure>
-          </div>
-        </div>
-      </div>
-      <div class="gallery-group">
-        <h4 class="gallery-group-title">📷 虎跳峽</h4>
-        <div class="gallery-shell">
-          <div class="gallery-hint"><span>點擊圖片可放大 · 左右滑動查看更多</span><div class="gallery-dots" aria-hidden="true"><span class="gallery-dot active"></span><span class="gallery-dot"></span><span class="gallery-dot"></span><span class="gallery-dot"></span><span class="gallery-dot"></span><span class="gallery-dot"></span></div></div>
-          <div class="gallery-scroll" data-gallery-id="虎跳峽">
-                <figure class="gallery-item" data-idx="0" data-full="https://i.imgur.com/0Fagjc5.jpeg" data-caption="峽谷入口" data-type="image"><img src="https://i.imgur.com/0Fagjc5.jpeg" alt="峽谷入口" loading="lazy"><figcaption>峽谷入口</figcaption></figure>
-                <figure class="gallery-item" data-idx="1" data-full="https://i.imgur.com/xHsj8h8.jpeg" data-caption="山谷步道" data-type="image"><img src="https://i.imgur.com/xHsj8h8.jpeg" alt="山谷步道" loading="lazy"><figcaption>山谷步道</figcaption></figure>
-                <figure class="gallery-item" data-idx="2" data-full="https://i.imgur.com/dGxh5vZ.jpeg" data-caption="江水激流" data-type="image"><img src="https://i.imgur.com/dGxh5vZ.jpeg" alt="江水激流" loading="lazy"><figcaption>江水激流</figcaption></figure>
-                <figure class="gallery-item" data-idx="3" data-full="https://i.imgur.com/A8ZnOhW.jpeg" data-caption="峽谷景觀" data-type="image"><img src="https://i.imgur.com/A8ZnOhW.jpeg" alt="峽谷景觀" loading="lazy"><figcaption>峽谷景觀</figcaption></figure>
-                <figure class="gallery-item" data-idx="4" data-full="https://i.imgur.com/GJOOPB9.jpeg" data-caption="山路留影" data-type="image"><img src="https://i.imgur.com/GJOOPB9.jpeg" alt="山路留影" loading="lazy"><figcaption>山路留影</figcaption></figure>
-                <figure class="gallery-item" data-idx="5" data-full="https://i.imgur.com/z2hQKyX.jpeg" data-caption="虎跳峽回憶" data-type="image"><img src="https://i.imgur.com/z2hQKyX.jpeg" alt="虎跳峽回憶" loading="lazy"><figcaption>虎跳峽回憶</figcaption></figure>
-                <figure class="gallery-item gallery-item--video" data-idx="6" data-full="https://i.imgur.com/2whcE04.mp4" data-caption="虎跳峽影片" data-type="video"><video class="gallery-video" src="https://i.imgur.com/2whcE04.mp4" muted loop playsinline preload="metadata"></video><figcaption>🎬 虎跳峽影片</figcaption></figure>
-          </div>
-        </div>
-      </div>
-        </div>
+        <div class="gallery-groups-wrap" id="galleryGroupsWrap"></div>
       </section>
 
       <!-- Gallery Lightbox -->
@@ -1263,7 +1215,7 @@
       </div>
 
     <div class="footer">
-      <span>互動地圖｜更新：2026-03-09</span>
+      <span>互動地圖｜更新：2026-07-09</span>
     </div>
   </div>
 
@@ -1629,7 +1581,7 @@ const HOTELS = {
           card.innerHTML=`
              <h4>${city} <span class="click-hint">看房</span></h4>
              <p style="font-weight:700;margin-bottom:2px;">${h.name}</p>
-             <p style="color:fff5e6;">${h.price}</p>
+             <p style="color:#fff5e6;">${h.price}</p>
           `;
           card.onclick = () => {
              // Scroll top
@@ -1647,6 +1599,8 @@ const HOTELS = {
       arr.forEach((p, idx) => {
         const btn = document.createElement('div');
         btn.className = 'itemBtn poiBtn';
+        btn.setAttribute('role','button');
+        btn.tabIndex = 0;
         btn.innerHTML = `<div><div class="name">${p.name}</div><div class="meta">${p.tag}</div></div>`;
         btn.addEventListener('click', () => selectPoi(day, idx, btn));
         poiList.appendChild(btn);
@@ -1676,8 +1630,10 @@ const HOTELS = {
       infoTitle.textContent = `${dayTitles[day]}｜${p.name}`;
       infoSub.textContent = `分類：${p.tag}。可切換「相片」查看預覽。`;
       mapFrame.src = p.url;
-      /*openAction.href = p.url;
-      openAction.textContent = '在新分頁開啟地圖';*/
+      if(openAction){
+        openAction.href = p.url;
+        openAction.textContent = '在新分頁開啟地圖';
+      }
       loadPhotos(p.photos);
       if(viewerMode==='photos') setMode('photos'); else setMode('map');
     }
@@ -1688,8 +1644,10 @@ const HOTELS = {
       const h = HOTELS[city][idx];
       infoTitle.textContent = `住宿｜${city}｜${h.name}`;
       infoSub.textContent = `價格：${h.price}。請切換相片查看。`;
-      openAction.href = h.url;
-      openAction.textContent = '前往預訂頁面';
+      if(openAction){
+        openAction.href = h.url;
+        openAction.textContent = '前往 Trip.com 預訂';
+      }
       loadPhotos(h.photos);
       setMode('photos');
     }
@@ -1719,7 +1677,7 @@ const HOTELS = {
       currentPhotos.forEach((u,i)=>{
         const t=document.createElement('div');
         t.className='thumb';
-        t.innerHTML=`<img src="${u}">`;
+        t.innerHTML=`<img src="${u}" loading="lazy" alt="縮圖 ${i+1}">`;
         t.onclick=()=>{currentPhotoIndex=i; renderPhoto();};
         thumbStrip.appendChild(t);
       });
@@ -1750,8 +1708,36 @@ const HOTELS = {
       }
     });
 
+    // ══ 鍵盤操作：Enter / Space 觸發按鈕，← / → 切換相片 ══
+    document.addEventListener('keydown', (e)=>{
+      const t = e.target;
+      if((e.key==='Enter'||e.key===' ') && t.getAttribute && t.getAttribute('role')==='button'){
+        e.preventDefault(); t.click(); return;
+      }
+      const lb = document.getElementById('galleryLightbox');
+      if(lb && lb.classList.contains('active')) return; // 燈箱開啟時交由燈箱處理
+      if(viewerMode==='photos' && currentPhotos.length){
+        if(e.key==='ArrowLeft')  prevPhoto.click();
+        if(e.key==='ArrowRight') nextPhoto.click();
+      }
+    });
+
+    // ══ 導覽列 scroll-spy ══
+    (function(){
+      const links = document.querySelectorAll('#topNav a');
+      const targets = Array.from(links).map(a=>document.querySelector(a.getAttribute('href')));
+      function spy(){
+        let idx = 0;
+        targets.forEach((sec,i)=>{ if(sec && sec.getBoundingClientRect().top <= 90) idx = i; });
+        links.forEach((a,i)=>a.classList.toggle('active', i===idx));
+      }
+      window.addEventListener('scroll', spy, {passive:true});
+      spy();
+    })();
+
     // Init
     renderPoiList(1);
+    renderHotels();   // 原版遺漏呼叫，住宿推薦區塊從未顯示
     const f = poiList.querySelector('.poiBtn');
     if(f) f.click();
   
@@ -1845,25 +1831,70 @@ const MEMORY_GROUPS = {
 };
 
 
-    // ══ Gallery Dots Sync ══
-    document.querySelectorAll('[data-gallery-id]').forEach(function(gallery) {
-      var shell = gallery.closest('.gallery-shell');
-      var dots  = shell ? shell.querySelectorAll('.gallery-dot') : [];
-      if (!dots.length) return;
-      function updateDots() {
-        var iw  = gallery.offsetWidth / 3 || gallery.offsetWidth;
-        var idx = Math.min(Math.round(gallery.scrollLeft / iw), dots.length - 1);
-        dots.forEach(function(d, i) { d.classList.toggle('active', i === idx); });
-      }
-      gallery.addEventListener('scroll', updateDots, { passive: true });
-      updateDots();
-      // hover-play video thumbnails
-      gallery.querySelectorAll('.gallery-item--video video').forEach(function(v) {
-        var fig = v.closest('.gallery-item');
-        fig.addEventListener('mouseenter', function() { v.play().catch(function(){}); });
-        fig.addEventListener('mouseleave', function() { v.pause(); v.currentTime = 0; });
+    // ══ 相簿：由 MEMORY_GROUPS 資料自動生成（單一資料來源，新增相片只需改上方陣列）══
+    (function(){
+      const wrap = document.getElementById('galleryGroupsWrap');
+      if(!wrap) return;
+      Object.keys(MEMORY_GROUPS).forEach(group=>{
+        const items  = MEMORY_GROUPS[group];
+        const titles = MEMORY_TITLE_MAP[group] || [];
+        const groupEl = document.createElement('div');
+        groupEl.className = 'gallery-group';
+        groupEl.innerHTML = `
+          <h4 class="gallery-group-title">📷 ${group}<span class="gallery-count">${items.length} 項</span></h4>
+          <div class="gallery-shell">
+            <div class="gallery-hint"><span>點擊放大 · 左右滑動查看更多</span><div class="gallery-dots" aria-hidden="true"></div></div>
+            <div class="gallery-scroll" data-gallery-id="${group}"></div>
+          </div>`;
+        const scroll = groupEl.querySelector('.gallery-scroll');
+        items.forEach((item, i)=>{
+          const cap = item.title || titles[i] || `${group} ${i+1}`;
+          const fig = document.createElement('figure');
+          fig.className = 'gallery-item' + (item.type==='video' ? ' gallery-item--video' : '');
+          fig.dataset.idx = i;
+          fig.dataset.full = item.src;
+          fig.dataset.caption = cap;
+          fig.dataset.type = item.type || 'image';
+          fig.tabIndex = 0;
+          fig.setAttribute('role','button');
+          fig.innerHTML = (item.type==='video')
+            ? `<video class="gallery-video" src="${item.src}" muted loop playsinline preload="metadata"></video><figcaption>🎬 ${cap}</figcaption>`
+            : `<img src="${item.src}" alt="${cap}" loading="lazy"><figcaption>${cap}</figcaption>`;
+          scroll.appendChild(fig);
+        });
+        wrap.appendChild(groupEl);
       });
-    });
+
+      // 指示點：依實際可視寬度動態計算頁數（原版硬編碼 6 點，與相片數不符）
+      document.querySelectorAll('[data-gallery-id]').forEach(gallery=>{
+        const shell = gallery.closest('.gallery-shell');
+        const dotsWrap = shell.querySelector('.gallery-dots');
+        function buildDots(){
+          const pages = Math.max(1, Math.ceil(gallery.scrollWidth / gallery.clientWidth));
+          dotsWrap.innerHTML = '';
+          for(let i=0;i<pages;i++){
+            const d = document.createElement('span');
+            d.className = 'gallery-dot' + (i===0?' active':'');
+            dotsWrap.appendChild(d);
+          }
+        }
+        function updateDots(){
+          const dots = dotsWrap.querySelectorAll('.gallery-dot');
+          if(!dots.length) return;
+          const idx = Math.min(Math.round(gallery.scrollLeft / gallery.clientWidth), dots.length-1);
+          dots.forEach((d,i)=>d.classList.toggle('active', i===idx));
+        }
+        buildDots();
+        gallery.addEventListener('scroll', updateDots, {passive:true});
+        let rT; window.addEventListener('resize', ()=>{ clearTimeout(rT); rT=setTimeout(()=>{buildDots(); updateDots();},150); });
+        // 影片縮圖 hover 預覽
+        gallery.querySelectorAll('.gallery-item--video video').forEach(v=>{
+          const fig = v.closest('.gallery-item');
+          fig.addEventListener('mouseenter', ()=>{ v.play().catch(()=>{}); });
+          fig.addEventListener('mouseleave', ()=>{ v.pause(); v.currentTime = 0; });
+        });
+      });
+    })();
 
     // ══ Gallery Lightbox ══
     (function() {
